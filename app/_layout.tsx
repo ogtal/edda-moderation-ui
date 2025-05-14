@@ -1,5 +1,7 @@
-import { Stack } from "expo-router";
+import { Slot } from "expo-router";
+import React from "react";
+import "../locales/i18n"; // Import i18n configuration
 
-export default function RootLayout() {
-  return <Stack />;
+export default function Layout() {
+  return <Slot />;
 }
