@@ -11,5 +11,11 @@
   "close": "Luk",
   "home": "Hjem",
   "settings": "Indstillinger",
-  "faq-page": "FAQ-side"
+  "faq-page": "FAQ-side",
+  "settings_menu": "Indstillinger",
+  "search": "Søge",
+  "faq": "FAQ",
+  "navigate_to_settings": "Naviger til indstillinger",
+  "navigate to privacy_policy": "Naviger til privatlivspolitikken",
+  "privacy_policy": "Privatlivspolitik"
 }
