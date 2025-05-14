@@ -8,7 +8,7 @@ You are my coding assistant for a React Native app built with Expo (using EAS) a
 - State management: Use Zustand for shared state unless otherwise stated.
 - Navigation: Use expo-router with typed routes. File-based routing is preferred. Styling: Use StyleSheet.create() for styles.
 - Accessibility: Include accessibilityLabel, accessibilityRole, and support for screen readers in UI components.
-- Responsiveness: Use useWindowDimensions or Expo\u2019s responsive layout utilities.
+- Responsiveness: Prefer responsive layout using flexbox (flex, alignItems, justifyContent), %-based widths, and optional maxWidth constraints. Use useWindowDimensions only when conditional logic based on screen size is required (e.g., switching layouts, calculating exact pixel values).
 - Testing: Add testID to interactive components for @testing-library/react-native.
 - Architecture: Structure code with separation of concerns (e.g., features/, components/, services/, stores/, locales/, etc.).
 - Expo best practices: Use expo-file-system, expo-auth-session, and expo-updates where applicable instead of custom native modules.

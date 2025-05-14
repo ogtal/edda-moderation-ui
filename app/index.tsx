@@ -1,6 +1,6 @@
 import { t } from "i18next";
 import React from "react";
-import { Button, FlatList, StyleSheet, Text, useWindowDimensions, View } from "react-native";
+import { Button, FlatList, StyleSheet, Text, View } from "react-native";
 import { useModerationStore } from "../stores/moderationStore";
 
 interface Comment {
@@ -15,7 +15,6 @@ const dummyComments: Comment[] = [
 ];
 
 export default function Index() {
-  const { width } = useWindowDimensions();
   const { moderateComment } = useModerationStore();
 
   const handleModeration = (id: string, action: "keep" | "delete") => {
@@ -23,7 +22,7 @@ export default function Index() {
   };
 
   return (
-    <View style={[styles.container, { width }]}>
+    <View style={styles.container}>
       <Text style={styles.title}>{t("moderation_title")}</Text>
       <FlatList
         data={dummyComments}
@@ -60,6 +59,9 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     padding: 16,
+    width: "100%",
+    maxWidth: 600,
+    alignSelf: "center",
   },
   title: {
     fontSize: 24,
