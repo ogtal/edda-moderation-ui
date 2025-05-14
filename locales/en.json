@@ -8,5 +8,7 @@
   "close": "Close",
   "keep": "Keep",
   "delete": "Delete",
-  "hide": "Hide"
+  "hide": "Hide",
+  "home": "Home",
+  "settings": "Settings"
 }

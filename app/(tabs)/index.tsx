@@ -1,10 +1,17 @@
 import { Ionicons } from "@expo/vector-icons";
 import { t } from "i18next";
 import React, { useState } from "react";
-import { FlatList, Modal, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import {
+  FlatList,
+  Modal,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
-import CommentCard from "../components/CommentCard";
-import { useModerationStore } from "../stores/moderationStore";
+import CommentCard from "../../components/CommentCard";
+import { useModerationStore } from "../../stores/moderationStore";
 
 interface Comment {
   id: string;
@@ -52,10 +59,7 @@ export default function Index() {
         data={filteredComments}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
-          <CommentCard
-            comment={item}
-            onModerate={handleModeration}
-          />
+          <CommentCard comment={item} onModerate={handleModeration} />
         )}
       />
 
@@ -68,7 +72,9 @@ export default function Index() {
       >
         <View style={styles.modalOverlay}>
           <View style={styles.modalContent}>
-            <Text style={styles.modalTitle}>{t("filter_title") || "Filter Options"}</Text>
+            <Text style={styles.modalTitle}>
+              {t("filter_title") || "Filter Options"}
+            </Text>
             <TouchableOpacity
               style={[
                 styles.filterOption,
@@ -82,7 +88,9 @@ export default function Index() {
               accessibilityLabel={t("filter_hateful") || "Hateful"}
               accessibilityRole="button"
             >
-              <Text style={styles.filterOptionText}>{t("filter_hateful") || "Hateful"}</Text>
+              <Text style={styles.filterOptionText}>
+                {t("filter_hateful") || "Hateful"}
+              </Text>
             </TouchableOpacity>
             <TouchableOpacity
               style={[
@@ -108,7 +116,9 @@ export default function Index() {
               accessibilityLabel={t("filter_close") || "Close Filter"}
               accessibilityRole="button"
             >
-              <Text style={styles.closeButtonText}>{t("close") || "Close"}</Text>
+              <Text style={styles.closeButtonText}>
+                {t("close") || "Close"}
+              </Text>
             </TouchableOpacity>
           </View>
         </View>
