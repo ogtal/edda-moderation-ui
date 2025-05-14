@@ -17,5 +17,8 @@
   "faq": "FAQ",
   "navigate_to_settings": "Naviger til indstillinger",
   "navigate to privacy_policy": "Naviger til privatlivspolitikken",
-  "privacy_policy": "Privatlivspolitik"
+  "privacy_policy": "Privatlivspolitik",
+  "search_input": "Søgningsinput",
+  "no_results": "Ingen resultater",
+  "search_placeholder": "Søg efter kommentarer..."
 }

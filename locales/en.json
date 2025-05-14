@@ -17,5 +17,6 @@
   "navigate_to_settings": "Navigate to settings",
   "privacy_policy": "Privacy policy",
   "search": "Search",
-  "settings_menu": "Settings"
+  "settings_menu": "Settings",
+  "search_placeholder": "Search comments..."
 }
