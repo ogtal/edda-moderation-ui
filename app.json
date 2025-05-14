@@ -37,6 +37,13 @@
     ],
     "experiments": {
       "typedRoutes": true
-    }
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "65325a1e-fac1-4a69-a905-aa79b28101ea"
+      }
+    },
+    "owner": "ogtal"
   }
 }
