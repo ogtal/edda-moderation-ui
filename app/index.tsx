@@ -2,6 +2,8 @@ import { Ionicons } from "@expo/vector-icons";
 import { t } from "i18next";
 import React, { useState } from "react";
 import { FlatList, Modal, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
+import CommentCard from "../components/CommentCard";
 import { useModerationStore } from "../stores/moderationStore";
 
 interface Comment {
@@ -16,11 +18,6 @@ const dummyComments: Comment[] = [
   { id: "3", text: "Please check your facts before posting.", isHateful: true },
   { id: "4", text: "Nice work!", isHateful: false },
   { id: "5", text: "This is offensive and rude.", isHateful: true },
-  { id: "6", text: "Great job on this project!", isHateful: false },
-  { id: "7", text: "This is absolutely unacceptable.", isHateful: true },
-  { id: "8", text: "I love this idea!", isHateful: false },
-  { id: "9", text: "You should be ashamed of yourself.", isHateful: true },
-  { id: "10", text: "Fantastic effort!", isHateful: false },
 ];
 
 export default function Index() {
@@ -28,19 +25,18 @@ export default function Index() {
   const [filter, setFilter] = useState<"hateful" | "nonHateful">("hateful");
   const [isFilterModalVisible, setFilterModalVisible] = useState(false);
 
-  const handleModeration = (id: string, action: "keep" | "delete" | "hide") => {
-    moderateComment(id, action);
-  };
-
   const filteredComments = dummyComments.filter((comment) =>
     filter === "hateful" ? comment.isHateful : !comment.isHateful
   );
 
+  const handleModeration = (id: string, action: "keep" | "delete") => {
+    moderateComment(id, action);
+  };
+
   return (
-    <View style={styles.container}>
+    <GestureHandlerRootView style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.title}>{t("moderation_title")}</Text>
-        {/* Filter Icon Button */}
         <TouchableOpacity
           style={styles.filterButton}
           onPress={() => setFilterModalVisible(true)}
@@ -52,45 +48,14 @@ export default function Index() {
         </TouchableOpacity>
       </View>
 
-      {/* Comments List */}
       <FlatList
         data={filteredComments}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
-          <View style={styles.commentContainer}>
-            <Text style={styles.commentText} accessibilityLabel={item.text}>
-              {item.text}
-            </Text>
-            <View style={styles.buttonContainer}>
-              <TouchableOpacity
-                onPress={() => handleModeration(item.id, "keep")}
-                testID={`keep-button-${item.id}`}
-                accessibilityLabel={t("keep") || "Keep"}
-                style={styles.actionButton}
-              >
-                <Ionicons name="checkmark" size={20} color="#007BFF" />
-                <Text style={styles.actionButtonText}>{t("keep") || "Keep"}</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                onPress={() => handleModeration(item.id, "delete")}
-                testID={`delete-button-${item.id}`}
-                accessibilityLabel={t("delete") || "Delete"}
-                style={styles.actionButton}
-              >
-                <Ionicons name="trash-outline" size={20} color="#007BFF" />
-                <Text style={styles.actionButtonText}>{t("delete") || "Delete"}</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                onPress={() => handleModeration(item.id, "hide")}
-                testID={`hide-button-${item.id}`}
-                accessibilityLabel={t("hide") || "Hide"}
-                style={styles.actionButton}
-              >
-                <Ionicons name="eye-off-outline" size={20} color="#007BFF" />
-                <Text style={styles.actionButtonText}>{t("hide") || "Hide"}</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
+          <CommentCard
+            comment={item}
+            onModerate={handleModeration}
+          />
         )}
       />
 
@@ -148,7 +113,7 @@ export default function Index() {
           </View>
         </View>
       </Modal>
-    </View>
+    </GestureHandlerRootView>
   );
 }
 
@@ -170,30 +135,6 @@ const styles = StyleSheet.create({
   },
   filterButton: {
     padding: 8,
-  },
-  commentContainer: {
-    marginBottom: 16,
-    padding: 16,
-    backgroundColor: "#f9f9f9",
-    borderRadius: 8,
-  },
-  commentText: {
-    fontSize: 16,
-    marginBottom: 8,
-  },
-  buttonContainer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-  },
-  actionButton: {
-    flexDirection: "row",
-    alignItems: "center",
-    padding: 8,
-  },
-  actionButtonText: {
-    marginLeft: 8,
-    fontSize: 16,
-    color: "#007BFF",
   },
   modalOverlay: {
     flex: 1,
