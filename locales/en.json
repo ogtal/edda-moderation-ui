@@ -1,5 +1,12 @@
 {
+  "moderation_title": "Moderate Comments",
+  "filter_open": "Open Filter",
+  "filter_title": "Filter Options",
+  "filter_hateful": "Hateful",
+  "filter_non_hateful": "Non-Hateful",
+  "filter_close": "Close Filter",
+  "close": "Close",
   "keep": "Keep",
   "delete": "Delete",
-  "moderation_title": "Moderate Comments"
+  "hide": "Hide"
 }

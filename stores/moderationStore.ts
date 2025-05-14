@@ -1,12 +1,17 @@
 import { create } from "zustand";
 
 interface ModerationState {
-  moderateComment: (id: string, action: "keep" | "delete") => void;
+  moderateComment: (id: string, action: "keep" | "delete" | "hide") => void;
 }
 
 export const useModerationStore = create<ModerationState>((set) => ({
   moderateComment: (id, action) => {
-    console.log(`Comment ${id} has been ${action === "keep" ? "kept" : "deleted"}.`);
-    // Here, you would trigger the backend API call to Facebook.
+    if (action === "keep") {
+      console.log(`Comment ${id} has been kept.`);
+    } else if (action === "delete") {
+      console.log(`Comment ${id} has been deleted.`);
+    } else if (action === "hide") {
+      console.log(`Comment ${id} has been hidden.`);
+    }
   },
 }));

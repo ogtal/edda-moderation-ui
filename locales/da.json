@@ -1,5 +1,12 @@
 {
+  "moderation_title": "Moderér kommentarer",
+  "filter_open": "Åbn filter",
+  "filter_title": "Filtermuligheder",
+  "filter_hateful": "Hadefulde",
+  "filter_non_hateful": "Ikke-hadefulde",
+  "filter_close": "Luk filter",
   "keep": "Behold",
   "delete": "Slet",
-  "moderation_title": "Moderér kommentarer"
+  "hide": "Skjul",
+  "close": "Luk"
 }
