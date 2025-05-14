@@ -30,6 +30,11 @@ export default function CommentCard({ comment, onModerate }: CommentCardProps) {
   const dragOccurred = useSharedValue(false); // \U0001f525 Moved to shared value
 
   const panGesture = Gesture.Pan()
+    // to prevent the gesture from being recognized if the user is dragging vertically
+    // so the user can scroll the list
+    .minDistance(10) // dont activate until moved 10px
+    .activeOffsetX([-10, 10]) // must drag more than 10px horizontally
+    .failOffsetY([-10, 10]) // fail gesture if moving vertically > 10px
     .onBegin(() => {
       dragOccurred.value = false;
     })
