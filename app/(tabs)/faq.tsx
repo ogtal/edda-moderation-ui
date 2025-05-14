@@ -1,10 +1,11 @@
+import { t } from "i18next";
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
 
 export default function FAQ() {
   return (
     <View style={styles.container}>
-      <Text style={styles.text}>FAQ Page</Text>
+      <Text style={styles.text}>{t("faq-page")}</Text>
     </View>
   );
 }
