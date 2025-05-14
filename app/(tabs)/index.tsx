@@ -1,48 +1,47 @@
-import React, { useState } from "react";
-import { FlatList, StyleSheet } from "react-native";
+import { t } from "i18next";
+import React, { useEffect, useState } from "react";
+import { FlatList, StyleSheet, Text, View } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import CommentCard from "../../components/CommentCard";
 import FilterModal from "../../components/FilterModal";
 import Header from "../../components/Header";
 import { useModerationStore } from "../../stores/moderationStore";
 
-interface Comment {
-  id: string;
-  text: string;
-  isHateful: boolean;
-}
-
-const dummyComments: Comment[] = [
-  { id: "1", text: "This is a great post!", isHateful: false },
-  { id: "2", text: "I disagree with this completely.", isHateful: true },
-  { id: "3", text: "Please check your facts before posting.", isHateful: true },
-  { id: "4", text: "Nice work!", isHateful: false },
-  { id: "5", text: "This is offensive and rude.", isHateful: true },
-];
-
 export default function Index() {
-  const { moderateComment } = useModerationStore();
+  const { comments, fetchComments, moderateComment } = useModerationStore();
   const [filter, setFilter] = useState<"hateful" | "nonHateful">("hateful");
   const [isFilterModalVisible, setFilterModalVisible] = useState(false);
 
-  const filteredComments = dummyComments.filter((comment) =>
+  useEffect(() => {
+    fetchComments(); // Fetch comments when the component mounts
+  }, [fetchComments]);
+
+  const filteredComments = comments.filter((comment) =>
     filter === "hateful" ? comment.isHateful : !comment.isHateful
   );
 
-  const handleModeration = (id: string, action: "keep" | "delete") => {
+  const handleModeration = (id: string, action: "keep" | "delete" | "hide") => {
     moderateComment(id, action);
   };
 
   return (
     <GestureHandlerRootView style={styles.container}>
       <Header onFilterPress={() => setFilterModalVisible(true)} />
-      <FlatList
-        data={filteredComments}
-        keyExtractor={(item) => item.id}
-        renderItem={({ item }) => (
-          <CommentCard comment={item} onModerate={handleModeration} />
-        )}
-      />
+      {filteredComments.length > 0 ? (
+        <FlatList
+          data={filteredComments}
+          keyExtractor={(item) => item.id}
+          renderItem={({ item }) => (
+            <CommentCard comment={item} onModerate={handleModeration} />
+          )}
+        />
+      ) : (
+        <View style={styles.emptyState}>
+          <Text style={styles.emptyText}>
+            {t("no_comments") || "No comments to display"}
+          </Text>
+        </View>
+      )}
       <FilterModal
         visible={isFilterModalVisible}
         filter={filter}
@@ -58,5 +57,14 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 16,
     backgroundColor: "#ffffff",
+  },
+  emptyState: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  emptyText: {
+    fontSize: 16,
+    color: "#888888",
   },
 });

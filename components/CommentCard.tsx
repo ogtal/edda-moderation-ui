@@ -52,7 +52,7 @@ export default function CommentCard({ comment, onModerate }: CommentCardProps) {
     }
   });
 
-  const composedGesture = Gesture.Simultaneous(panGesture, tapGesture);
+  const composedGesture = Gesture.Exclusive(panGesture, tapGesture);
 
   const animatedStyle = useAnimatedStyle(() => ({
     transform: [{ translateX: translateX.value }],

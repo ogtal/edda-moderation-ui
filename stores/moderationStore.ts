@@ -1,11 +1,57 @@
 import { create } from "zustand";
 
+interface Comment {
+  id: string;
+  text: string;
+  author: string;
+  thread: string;
+  isHateful: boolean;
+}
+
 interface ModerationState {
+  comments: Comment[];
+  fetchComments: () => Promise<void>;
   moderateComment: (id: string, action: "keep" | "delete" | "hide") => void;
 }
 
 export const useModerationStore = create<ModerationState>((set) => ({
+  comments: [],
+  fetchComments: async () => {
+    try {
+      const response = await fetch("https://jsonplaceholder.typicode.com/comments?_limit=50");
+      const data = await response.json();
+
+      // Transform the data to match the Comment interface
+      const comments = data.map((item: any) => ({
+        id: item.id.toString(),
+        text: item.body,
+        author: item.email,
+        thread: `Post ${item.postId}`,
+        isHateful: Math.random() < 0.5, // Randomly assign true or false
+      }));
+
+      set({ comments });
+    } catch (error) {
+      console.error("Failed to fetch comments:", error);
+    }
+  },
   moderateComment: (id, action) => {
+    set((state) => ({
+      comments: state.comments.map((comment) =>
+        comment.id === id
+          ? {
+              ...comment,
+              text:
+                action === "delete"
+                  ? "[Deleted]"
+                  : action === "hide"
+                  ? "[Hidden]"
+                  : comment.text,
+            }
+          : comment
+      ),
+    }));
+
     if (action === "keep") {
       console.log(`Comment ${id} has been kept.`);
     } else if (action === "delete") {

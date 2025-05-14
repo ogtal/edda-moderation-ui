@@ -2,6 +2,8 @@ import { Ionicons } from "@expo/vector-icons";
 import { t } from "i18next";
 import React from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
+import { Gesture, GestureDetector } from "react-native-gesture-handler";
+import { runOnJS } from "react-native-reanimated";
 
 interface CommentCardButtonsProps {
   commentId: string;
@@ -14,37 +16,45 @@ export function CommentCardButtons({
 }: CommentCardButtonsProps) {
   return (
     <View style={styles.buttonContainer}>
-      {["keep", "hide", "delete"].map((action) => (
-        <Pressable
-          key={action}
-          onPress={(e) => {
-            e.stopPropagation();
-            onModerate(commentId, action as "keep" | "delete" | "hide");
-          }}
-          testID={`${action}-button-${commentId}`}
-          accessibilityLabel={t(`${action}_comment`) || `${action} Comment`}
-          accessibilityRole="button"
-          style={({ pressed }) => [
-            styles.actionButton,
-            pressed && styles.pressedButton,
-          ]}
-        >
-          <Ionicons
-            name={
-              action === "keep"
-                ? "checkmark-circle-outline"
-                : action === "hide"
-                ? "eye-off-outline"
-                : "trash-outline"
-            }
-            size={20}
-            color="#007BFF"
-          />
-          <Text style={styles.actionText}>
-            {t(action) || action.charAt(0).toUpperCase() + action.slice(1)}
-          </Text>
-        </Pressable>
-      ))}
+      {["keep", "hide", "delete"].map((action) => {
+        const buttonGesture = Gesture.Tap().onEnd(() => {
+          runOnJS(onModerate)(commentId, action as "keep" | "delete" | "hide");
+        });
+
+        return (
+          <GestureDetector key={action} gesture={buttonGesture}>
+            <View>
+              <Pressable
+                testID={`${action}-button-${commentId}`}
+                accessibilityLabel={
+                  t(`${action}_comment`) || `${action} Comment`
+                }
+                accessibilityRole="button"
+                style={({ pressed }) => [
+                  styles.actionButton,
+                  pressed && styles.pressedButton,
+                ]}
+              >
+                <Ionicons
+                  name={
+                    action === "keep"
+                      ? "checkmark-circle-outline"
+                      : action === "hide"
+                      ? "eye-off-outline"
+                      : "trash-outline"
+                  }
+                  size={20}
+                  color="#007BFF"
+                />
+                <Text style={styles.actionText}>
+                  {t(action) ||
+                    action.charAt(0).toUpperCase() + action.slice(1)}
+                </Text>
+              </Pressable>
+            </View>
+          </GestureDetector>
+        );
+      })}
     </View>
   );
 }
