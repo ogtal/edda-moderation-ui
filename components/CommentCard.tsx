@@ -17,7 +17,7 @@ interface Comment {
 
 interface CommentCardProps {
   comment: Comment;
-  onModerate: (id: string, action: "keep" | "delete") => void;
+  onModerate: (id: string, action: "keep" | "delete" | "hide") => void;
 }
 
 export default function CommentCard({ comment, onModerate }: CommentCardProps) {
@@ -50,20 +50,36 @@ export default function CommentCard({ comment, onModerate }: CommentCardProps) {
           <TouchableOpacity
             onPress={() => onModerate(comment.id, "keep")}
             testID={`keep-button-${comment.id}`}
-            accessibilityLabel="Keep"
+            accessibilityLabel="Keep Comment"
             accessibilityRole="button"
             style={styles.actionButton}
           >
-            <Ionicons name="checkmark" size={20} color="#007BFF" />
+            <Ionicons
+              name="checkmark-circle-outline"
+              size={20}
+              color="#007BFF"
+            />
+            <Text style={styles.actionText}>Keep</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => onModerate(comment.id, "hide")}
+            testID={`hide-button-${comment.id}`}
+            accessibilityLabel="Hide Comment"
+            accessibilityRole="button"
+            style={styles.actionButton}
+          >
+            <Ionicons name="eye-off-outline" size={20} color="#007BFF" />
+            <Text style={styles.actionText}>Hide</Text>
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => onModerate(comment.id, "delete")}
             testID={`delete-button-${comment.id}`}
-            accessibilityLabel="Delete"
+            accessibilityLabel="Delete Comment"
             accessibilityRole="button"
             style={styles.actionButton}
           >
             <Ionicons name="trash-outline" size={20} color="#007BFF" />
+            <Text style={styles.actionText}>Delete</Text>
           </TouchableOpacity>
         </View>
       </Animated.View>
@@ -84,9 +100,17 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     flexDirection: "row",
-    justifyContent: "space-between",
+    justifyContent: "flex-end",
+    alignItems: "center",
   },
   actionButton: {
-    padding: 8,
+    flexDirection: "row",
+    alignItems: "center",
+    marginLeft: 16,
+  },
+  actionText: {
+    marginLeft: 4,
+    color: "#007BFF",
+    fontSize: 14,
   },
 });

@@ -1,6 +1,6 @@
 import { Ionicons } from "@expo/vector-icons";
 import { Tabs } from "expo-router";
-import { t } from "i18next"; // or from your localization hook
+import { t } from "i18next";
 
 export default function TabLayout() {
   return (
