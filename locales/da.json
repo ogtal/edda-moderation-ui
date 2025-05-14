@@ -20,5 +20,6 @@
   "privacy_policy": "Privatlivspolitik",
   "search_input": "Søgningsinput",
   "no_results": "Ingen resultater",
-  "search_placeholder": "Søg efter kommentarer..."
+  "search_placeholder": "Søg efter kommentarer...",
+  "no_comments": "Ingen kommentarer"
 }

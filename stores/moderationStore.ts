@@ -37,17 +37,11 @@ export const useModerationStore = create<ModerationState>((set) => ({
   },
   moderateComment: (id, action) => {
     set((state) => ({
-      comments: state.comments.map((comment) =>
-        comment.id === id
-          ? {
-              ...comment,
-              text:
-                action === "delete"
-                  ? "[Deleted]"
-                  : action === "hide"
-                  ? "[Hidden]"
-                  : comment.text,
-            }
+      comments: state.comments.filter((comment) =>
+        action === "delete" ? comment.id !== id : true
+      ).map((comment) =>
+        comment.id === id && action === "hide"
+          ? { ...comment, text: "[Hidden]" }
           : comment
       ),
     }));

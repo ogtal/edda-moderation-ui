@@ -18,5 +18,8 @@
   "privacy_policy": "Privacy policy",
   "search": "Search",
   "settings_menu": "Settings",
-  "search_placeholder": "Search comments..."
+  "search_placeholder": "Search comments...",
+  "no_comments": "No comments",
+  "no_results": "No results",
+  "search_input": "Search input"
 }
