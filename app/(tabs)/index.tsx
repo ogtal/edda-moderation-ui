@@ -1,6 +1,6 @@
 import { t } from "i18next";
 import React, { useEffect, useState } from "react";
-import { FlatList, StyleSheet, Text, View } from "react-native";
+import { FlatList, RefreshControl, StyleSheet, Text, View } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import CommentCard from "../../components/CommentCard";
 import FilterModal from "../../components/FilterModal";
@@ -13,8 +13,16 @@ export default function Index() {
   const [isFilterModalVisible, setFilterModalVisible] = useState(false);
 
   useEffect(() => {
-    fetchComments(); // Fetch comments when the component mounts
+    fetchComments();
   }, [fetchComments]);
+
+  const [refreshing, setRefreshing] = useState(false);
+
+  const onRefresh = async () => {
+    setRefreshing(true);
+    await fetchComments();
+    setRefreshing(false);
+  };
 
   const filteredComments = comments.filter((comment) =>
     filter === "hateful" ? comment.isHateful : !comment.isHateful
@@ -34,6 +42,14 @@ export default function Index() {
           renderItem={({ item }) => (
             <CommentCard comment={item} onModerate={handleModeration} />
           )}
+          refreshControl={
+            <RefreshControl
+              refreshing={refreshing}
+              onRefresh={onRefresh}
+              tintColor="#007BFF" // Optional iOS style
+              colors={["#007BFF"]} // Android spinner colors
+            />
+          }
         />
       ) : (
         <View style={styles.emptyState}>
