@@ -45,7 +45,11 @@ export default function CommentCard({ comment, onModerate }: CommentCardProps) {
     })
     .onEnd(() => {
       if (translateX.value < -100) {
+        // Trigger delete action
         runOnJS(onModerate)(comment.id, "delete");
+      } else if (translateX.value > 100) {
+        // Trigger keep action
+        runOnJS(onModerate)(comment.id, "keep");
       }
       translateX.value = withSpring(0);
     });
@@ -65,6 +69,11 @@ export default function CommentCard({ comment, onModerate }: CommentCardProps) {
   const deleteBoxStyle = useAnimatedStyle(() => ({
     opacity: translateX.value < -20 ? 1 : 0,
     transform: [{ scale: translateX.value < -20 ? 1 : 0.8 }],
+  }));
+
+  const keepBoxStyle = useAnimatedStyle(() => ({
+    opacity: translateX.value > 20 ? 1 : 0,
+    transform: [{ scale: translateX.value > 20 ? 1 : 0.8 }],
   }));
 
   const handleModeration = (action: "keep" | "delete" | "hide") => {
@@ -87,6 +96,11 @@ export default function CommentCard({ comment, onModerate }: CommentCardProps) {
         {/* Delete Box */}
         <Animated.View style={[styles.deleteBox, deleteBoxStyle]}>
           <Text style={styles.deleteText}>Delete</Text>
+        </Animated.View>
+
+        {/* Keep Box */}
+        <Animated.View style={[styles.keepBox, keepBoxStyle]}>
+          <Text style={styles.keepText}>Keep</Text>
         </Animated.View>
 
         {/* Comment Card */}
@@ -126,6 +140,19 @@ const styles = StyleSheet.create({
     zIndex: 0, // behind the card
   },
   deleteText: {
+    color: "#fff",
+    fontWeight: "bold",
+    fontSize: 16,
+  },
+  keepBox: {
+    ...StyleSheet.absoluteFillObject,
+    justifyContent: "center",
+    alignItems: "flex-start",
+    paddingLeft: 20,
+    backgroundColor: "#4caf50", // Green for "keep"
+    zIndex: 0, // behind the card
+  },
+  keepText: {
     color: "#fff",
     fontWeight: "bold",
     fontSize: 16,
