@@ -1,11 +1,13 @@
 import React, { useState } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text } from "react-native";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
 import Animated, {
+  Layout,
   runOnJS,
   useAnimatedStyle,
   useSharedValue,
   withSpring,
+  withTiming,
 } from "react-native-reanimated";
 import { CommentCardButtons } from "./CommentCardButtons";
 import { CommentCardContent } from "./CommentCardContent";
@@ -26,6 +28,7 @@ interface CommentCardProps {
 
 export default function CommentCard({ comment, onModerate }: CommentCardProps) {
   const translateX = useSharedValue(0);
+  const scale = useSharedValue(1);
   const [isModalVisible, setModalVisible] = useState(false);
   const dragOccurred = useSharedValue(false);
 
@@ -56,7 +59,7 @@ export default function CommentCard({ comment, onModerate }: CommentCardProps) {
   const composedGesture = Gesture.Exclusive(panGesture, tapGesture);
 
   const animatedStyle = useAnimatedStyle(() => ({
-    transform: [{ translateX: translateX.value }],
+    transform: [{ translateX: translateX.value }, { scale: scale.value }],
   }));
 
   const deleteBoxStyle = useAnimatedStyle(() => ({
@@ -64,11 +67,23 @@ export default function CommentCard({ comment, onModerate }: CommentCardProps) {
     transform: [{ scale: translateX.value < -20 ? 1 : 0.8 }],
   }));
 
+  const handleModeration = (action: "keep" | "delete" | "hide") => {
+    if (action === "keep") {
+      scale.value = withTiming(1.1, { duration: 200 }, () => {
+        scale.value = withTiming(1, { duration: 200 });
+      });
+    }
+    runOnJS(onModerate)(comment.id, action);
+  };
+
   const handleCloseModal = () => setModalVisible(false);
 
   return (
     <>
-      <View style={styles.container}>
+      <Animated.View
+        style={styles.container}
+        layout={Layout.springify()} // Enable layout animation
+      >
         {/* Delete Box */}
         <Animated.View style={[styles.deleteBox, deleteBoxStyle]}>
           <Text style={styles.deleteText}>Delete</Text>
@@ -80,11 +95,11 @@ export default function CommentCard({ comment, onModerate }: CommentCardProps) {
             <CommentCardContent comment={comment} />
             <CommentCardButtons
               commentId={comment.id}
-              onModerate={onModerate}
+              onModerate={(id, action) => handleModeration(action)}
             />
           </Animated.View>
         </GestureDetector>
-      </View>
+      </Animated.View>
 
       {/* Comment Details Modal */}
       <CommentDetailsModal

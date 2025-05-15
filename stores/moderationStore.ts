@@ -39,23 +39,23 @@ export const useModerationStore = create<ModerationState>((set) => ({
     }
   },
   moderateComment: (id, action) => {
+    console.log(`Moderating comment ${id} with action: ${action}`);
+
     set((state) => ({
       comments: state.comments
         .filter((comment) => (action === "delete" ? comment.id !== id : true))
-        .map((comment) =>
-          comment.id === id && action === "hide"
-            ? { ...comment, text: "[Hidden]" }
-            : comment
-        ),
+        .filter((comment) => (action === "keep" ? comment.id !== id : true))
+        .filter((comment) => (action === "hide" ? comment.id !== id : true)),
     }));
 
     if (action === "keep") {
+      Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
       console.log(`Comment ${id} has been kept.`);
     } else if (action === "delete") {
       Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
       console.log(`Comment ${id} has been deleted.`);
     } else if (action === "hide") {
-      Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+      Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
       console.log(`Comment ${id} has been hidden.`);
     }
   },
