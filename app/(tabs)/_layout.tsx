@@ -10,6 +10,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import colors from "../../theme/colors";
 
 export default function TabLayout() {
   const [isDropdownVisible, setDropdownVisible] = useState(false);
@@ -24,7 +25,11 @@ export default function TabLayout() {
     <>
       <Tabs
         screenOptions={{
-          tabBarActiveTintColor: "#007BFF",
+          tabBarStyle: {
+            backgroundColor: colors.fadedPrimary,
+            borderTopWidth: 0,
+          },
+          tabBarActiveTintColor: colors.primary,
           headerRight: () => (
             <TouchableOpacity
               onPress={() => setDropdownVisible(true)}
@@ -48,6 +53,9 @@ export default function TabLayout() {
                 size={24}
               />
             ),
+            sceneStyle: {
+              backgroundColor: colors.platinum,
+            },
           }}
         />
         <Tabs.Screen
