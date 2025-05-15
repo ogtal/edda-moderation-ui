@@ -18,7 +18,7 @@ export default function Header({ onFilterPress }: HeaderProps) {
         accessibilityLabel={t("filter_open") || "Open Filter"}
         accessibilityRole="button"
       >
-        <Ionicons name="filter" size={24} color="#007BFF" />
+        <Ionicons name="filter" size={24} />
       </TouchableOpacity>
     </View>
   );

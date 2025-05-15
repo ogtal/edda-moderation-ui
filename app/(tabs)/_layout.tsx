@@ -32,7 +32,7 @@ export default function TabLayout() {
               accessibilityLabel={t("settings_menu")}
               accessibilityRole="button"
             >
-              <Ionicons name="person" size={24} color="#007BFF" />
+              <Ionicons name="person" size={24} />
             </TouchableOpacity>
           ),
         }}
