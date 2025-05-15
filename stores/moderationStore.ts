@@ -1,3 +1,4 @@
+import * as Haptics from "expo-haptics";
 import { create } from "zustand";
 
 interface Comment {
@@ -18,7 +19,9 @@ export const useModerationStore = create<ModerationState>((set) => ({
   comments: [],
   fetchComments: async () => {
     try {
-      const response = await fetch("https://jsonplaceholder.typicode.com/comments?_limit=50");
+      const response = await fetch(
+        "https://jsonplaceholder.typicode.com/comments?_limit=50"
+      );
       const data = await response.json();
 
       // Transform the data to match the Comment interface
@@ -37,20 +40,22 @@ export const useModerationStore = create<ModerationState>((set) => ({
   },
   moderateComment: (id, action) => {
     set((state) => ({
-      comments: state.comments.filter((comment) =>
-        action === "delete" ? comment.id !== id : true
-      ).map((comment) =>
-        comment.id === id && action === "hide"
-          ? { ...comment, text: "[Hidden]" }
-          : comment
-      ),
+      comments: state.comments
+        .filter((comment) => (action === "delete" ? comment.id !== id : true))
+        .map((comment) =>
+          comment.id === id && action === "hide"
+            ? { ...comment, text: "[Hidden]" }
+            : comment
+        ),
     }));
 
     if (action === "keep") {
       console.log(`Comment ${id} has been kept.`);
     } else if (action === "delete") {
+      Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
       console.log(`Comment ${id} has been deleted.`);
     } else if (action === "hide") {
+      Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
       console.log(`Comment ${id} has been hidden.`);
     }
   },
