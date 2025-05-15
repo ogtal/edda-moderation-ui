@@ -22,7 +22,7 @@ export function CommentCardContent({ comment }: CommentCardContentProps) {
       testID={`comment-${comment.id}`}
     >
       <View style={styles.header}>
-        {/* Red dot for harmful comments */}
+        {/* Red dot for hateful comments */}
         {comment.isHateful && <View style={styles.redDot} />}
         <Text style={styles.authorText}>{comment.author}</Text>
         <Text style={styles.timeText}>{formatMailStyleDate(comment.time)}</Text>
@@ -48,17 +48,17 @@ const styles = StyleSheet.create({
     height: 8,
     borderRadius: 4,
     backgroundColor: "red",
-    marginRight: 8, // Space between the dot and the author name
+    marginRight: 8,
   },
   authorText: {
     fontSize: 16,
     fontWeight: "bold",
-    flex: 1, // Allow the author name to take up remaining space
+    flex: 1,
   },
   timeText: {
     fontSize: 12,
     color: "#888",
-    marginLeft: 8, // Space between the author name and the time
+    marginLeft: 8,
   },
   commentText: {
     fontSize: 14,
