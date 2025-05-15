@@ -4,7 +4,13 @@ import { StyleSheet, Text, View } from "react-native";
 import { formatMailStyleDate } from "../utils/dateUtils";
 
 interface CommentCardContentProps {
-  comment: { id: string; text: string; author: string; time: string };
+  comment: {
+    id: string;
+    text: string;
+    author: string;
+    time: string;
+    isHateful: boolean;
+  };
 }
 
 export function CommentCardContent({ comment }: CommentCardContentProps) {
@@ -16,6 +22,8 @@ export function CommentCardContent({ comment }: CommentCardContentProps) {
       testID={`comment-${comment.id}`}
     >
       <View style={styles.header}>
+        {/* Red dot for harmful comments */}
+        {comment.isHateful && <View style={styles.redDot} />}
         <Text style={styles.authorText}>{comment.author}</Text>
         <Text style={styles.timeText}>{formatMailStyleDate(comment.time)}</Text>
       </View>
@@ -32,18 +40,28 @@ const styles = StyleSheet.create({
   },
   header: {
     flexDirection: "row",
-    justifyContent: "space-between",
     alignItems: "center",
+    justifyContent: "space-between",
+  },
+  redDot: {
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+    backgroundColor: "red",
+    marginRight: 8, // Space between the dot and the author name
   },
   authorText: {
     fontSize: 16,
     fontWeight: "bold",
+    flex: 1, // Allow the author name to take up remaining space
   },
   timeText: {
     fontSize: 12,
     color: "#888",
+    marginLeft: 8, // Space between the author name and the time
   },
   commentText: {
     fontSize: 14,
+    marginTop: 4,
   },
 });
