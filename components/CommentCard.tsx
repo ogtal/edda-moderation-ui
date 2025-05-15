@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { StyleSheet, Text } from "react-native";
+import { StyleSheet } from "react-native";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
 import Animated, {
   Layout,
@@ -7,11 +7,11 @@ import Animated, {
   useAnimatedStyle,
   useSharedValue,
   withSpring,
-  withTiming,
 } from "react-native-reanimated";
 import { CommentCardButtons } from "./CommentCardButtons";
 import { CommentCardContent } from "./CommentCardContent";
 import { CommentDetailsModal } from "./CommentDetailsModal";
+import { SwipeActionBox } from "./SwipeActionBox";
 
 interface Comment {
   id: string;
@@ -28,7 +28,6 @@ interface CommentCardProps {
 
 export default function CommentCard({ comment, onModerate }: CommentCardProps) {
   const translateX = useSharedValue(0);
-  const scale = useSharedValue(1);
   const [isModalVisible, setModalVisible] = useState(false);
   const dragOccurred = useSharedValue(false);
 
@@ -45,10 +44,8 @@ export default function CommentCard({ comment, onModerate }: CommentCardProps) {
     })
     .onEnd(() => {
       if (translateX.value < -100) {
-        // Trigger delete action
         runOnJS(onModerate)(comment.id, "delete");
       } else if (translateX.value > 100) {
-        // Trigger keep action
         runOnJS(onModerate)(comment.id, "keep");
       }
       translateX.value = withSpring(0);
@@ -63,27 +60,8 @@ export default function CommentCard({ comment, onModerate }: CommentCardProps) {
   const composedGesture = Gesture.Exclusive(panGesture, tapGesture);
 
   const animatedStyle = useAnimatedStyle(() => ({
-    transform: [{ translateX: translateX.value }, { scale: scale.value }],
+    transform: [{ translateX: translateX.value }],
   }));
-
-  const deleteBoxStyle = useAnimatedStyle(() => ({
-    opacity: translateX.value < -20 ? 1 : 0,
-    transform: [{ scale: translateX.value < -20 ? 1 : 0.8 }],
-  }));
-
-  const keepBoxStyle = useAnimatedStyle(() => ({
-    opacity: translateX.value > 20 ? 1 : 0,
-    transform: [{ scale: translateX.value > 20 ? 1 : 0.8 }],
-  }));
-
-  const handleModeration = (action: "keep" | "delete" | "hide") => {
-    if (action === "keep") {
-      scale.value = withTiming(1.1, { duration: 200 }, () => {
-        scale.value = withTiming(1, { duration: 200 });
-      });
-    }
-    runOnJS(onModerate)(comment.id, action);
-  };
 
   const handleCloseModal = () => setModalVisible(false);
 
@@ -93,15 +71,9 @@ export default function CommentCard({ comment, onModerate }: CommentCardProps) {
         style={styles.container}
         layout={Layout.springify()} // Enable layout animation
       >
-        {/* Delete Box */}
-        <Animated.View style={[styles.deleteBox, deleteBoxStyle]}>
-          <Text style={styles.deleteText}>Delete</Text>
-        </Animated.View>
-
-        {/* Keep Box */}
-        <Animated.View style={[styles.keepBox, keepBoxStyle]}>
-          <Text style={styles.keepText}>Keep</Text>
-        </Animated.View>
+        {/* Swipe Action Boxes */}
+        <SwipeActionBox type="delete" translateX={translateX} />
+        <SwipeActionBox type="keep" translateX={translateX} />
 
         {/* Comment Card */}
         <GestureDetector gesture={composedGesture}>
@@ -109,7 +81,7 @@ export default function CommentCard({ comment, onModerate }: CommentCardProps) {
             <CommentCardContent comment={comment} />
             <CommentCardButtons
               commentId={comment.id}
-              onModerate={(id, action) => handleModeration(action)}
+              onModerate={onModerate}
             />
           </Animated.View>
         </GestureDetector>
@@ -130,32 +102,6 @@ const styles = StyleSheet.create({
     position: "relative",
     backgroundColor: "#fff",
     overflow: "hidden",
-  },
-  deleteBox: {
-    ...StyleSheet.absoluteFillObject,
-    justifyContent: "center",
-    alignItems: "flex-end",
-    paddingRight: 20,
-    backgroundColor: "#ff4d4d",
-    zIndex: 0, // behind the card
-  },
-  deleteText: {
-    color: "#fff",
-    fontWeight: "bold",
-    fontSize: 16,
-  },
-  keepBox: {
-    ...StyleSheet.absoluteFillObject,
-    justifyContent: "center",
-    alignItems: "flex-start",
-    paddingLeft: 20,
-    backgroundColor: "#4caf50", // Green for "keep"
-    zIndex: 0, // behind the card
-  },
-  keepText: {
-    color: "#fff",
-    fontWeight: "bold",
-    fontSize: 16,
   },
   commentContainer: {
     backgroundColor: "#fff",
