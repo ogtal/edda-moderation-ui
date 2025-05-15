@@ -7,6 +7,7 @@ interface Comment {
   author: string;
   thread: string;
   isHateful: boolean;
+  time: string;
 }
 
 interface ModerationState {
@@ -31,6 +32,10 @@ export const useModerationStore = create<ModerationState>((set) => ({
         author: item.email,
         thread: `Post ${item.postId}`,
         isHateful: Math.random() < 0.5, // Randomly assign true or false
+        // generate a random timestamp in iso format
+        time: new Date(
+          Date.now() - Math.floor(Math.random() * 1000000000)
+        ).toISOString(),
       }));
 
       set({ comments });
