@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { StyleSheet } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
 import Animated, {
   runOnJS,
@@ -27,14 +27,12 @@ interface CommentCardProps {
 export default function CommentCard({ comment, onModerate }: CommentCardProps) {
   const translateX = useSharedValue(0);
   const [isModalVisible, setModalVisible] = useState(false);
-  const dragOccurred = useSharedValue(false); // \U0001f525 Moved to shared value
+  const dragOccurred = useSharedValue(false);
 
   const panGesture = Gesture.Pan()
-    // to prevent the gesture from being recognized if the user is dragging vertically
-    // so the user can scroll the list
-    .minDistance(10) // dont activate until moved 10px
-    .activeOffsetX([-10, 10]) // must drag more than 10px horizontally
-    .failOffsetY([-10, 10]) // fail gesture if moving vertically > 10px
+    .minDistance(10)
+    .activeOffsetX([-10, 10])
+    .failOffsetY([-10, 10])
     .onBegin(() => {
       dragOccurred.value = false;
     })
@@ -43,9 +41,7 @@ export default function CommentCard({ comment, onModerate }: CommentCardProps) {
       dragOccurred.value = true;
     })
     .onEnd(() => {
-      if (translateX.value > 100) {
-        runOnJS(onModerate)(comment.id, "keep");
-      } else if (translateX.value < -100) {
+      if (translateX.value < -100) {
         runOnJS(onModerate)(comment.id, "delete");
       }
       translateX.value = withSpring(0);
@@ -63,16 +59,34 @@ export default function CommentCard({ comment, onModerate }: CommentCardProps) {
     transform: [{ translateX: translateX.value }],
   }));
 
+  const deleteBoxStyle = useAnimatedStyle(() => ({
+    opacity: translateX.value < -20 ? 1 : 0,
+    transform: [{ scale: translateX.value < -20 ? 1 : 0.8 }],
+  }));
+
   const handleCloseModal = () => setModalVisible(false);
 
   return (
     <>
-      <GestureDetector gesture={composedGesture}>
-        <Animated.View style={[styles.commentContainer, animatedStyle]}>
-          <CommentCardContent comment={comment} />
-          <CommentCardButtons commentId={comment.id} onModerate={onModerate} />
+      <View style={styles.container}>
+        {/* Delete Box */}
+        <Animated.View style={[styles.deleteBox, deleteBoxStyle]}>
+          <Text style={styles.deleteText}>Delete</Text>
         </Animated.View>
-      </GestureDetector>
+
+        {/* Comment Card */}
+        <GestureDetector gesture={composedGesture}>
+          <Animated.View style={[styles.commentContainer, animatedStyle]}>
+            <CommentCardContent comment={comment} />
+            <CommentCardButtons
+              commentId={comment.id}
+              onModerate={onModerate}
+            />
+          </Animated.View>
+        </GestureDetector>
+      </View>
+
+      {/* Comment Details Modal */}
       <CommentDetailsModal
         isVisible={isModalVisible}
         onClose={handleCloseModal}
@@ -83,10 +97,30 @@ export default function CommentCard({ comment, onModerate }: CommentCardProps) {
 }
 
 const styles = StyleSheet.create({
+  container: {
+    position: "relative",
+    backgroundColor: "#fff",
+    overflow: "hidden",
+  },
+  deleteBox: {
+    ...StyleSheet.absoluteFillObject,
+    justifyContent: "center",
+    alignItems: "flex-end",
+    paddingRight: 20,
+    backgroundColor: "#ff4d4d",
+    zIndex: 0, // behind the card
+  },
+  deleteText: {
+    color: "#fff",
+    fontWeight: "bold",
+    fontSize: 16,
+  },
   commentContainer: {
-    marginBottom: 16,
-    padding: 16,
-    backgroundColor: "#f9f9f9",
-    borderRadius: 8,
+    backgroundColor: "#fff",
+    zIndex: 1,
+    borderBottomColor: "#ddd",
+    paddingVertical: 16,
+    paddingHorizontal: 16,
+    borderBottomWidth: 1,
   },
 });

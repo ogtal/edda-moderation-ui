@@ -3,7 +3,7 @@ import React from "react";
 import { StyleSheet, Text, View } from "react-native";
 
 interface CommentCardContentProps {
-  comment: { id: string; text: string };
+  comment: { id: string; text: string; author: string };
 }
 
 export function CommentCardContent({ comment }: CommentCardContentProps) {
@@ -14,7 +14,10 @@ export function CommentCardContent({ comment }: CommentCardContentProps) {
       accessibilityRole="button"
       testID={`comment-${comment.id}`}
     >
-      <Text style={styles.commentText}>{comment.text}</Text>
+      <Text style={styles.authorText}>{comment.author}</Text>
+      <Text style={styles.commentText} numberOfLines={2}>
+        {comment.text}{" "}
+      </Text>
     </View>
   );
 }
@@ -23,7 +26,11 @@ const styles = StyleSheet.create({
   cardContent: {
     marginBottom: 8,
   },
-  commentText: {
+  authorText: {
     fontSize: 16,
+    fontWeight: "bold",
+  },
+  commentText: {
+    fontSize: 14,
   },
 });
