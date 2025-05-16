@@ -1,6 +1,8 @@
-import React from "react";
-import { StyleSheet, Text } from "react-native";
-import Animated, { useAnimatedStyle } from "react-native-reanimated";
+import * as Haptics from "expo-haptics";
+import { t } from "i18next";
+import React, { useRef } from "react";
+import { StyleSheet, Text, View } from "react-native";
+import Animated, { runOnJS, useAnimatedStyle } from "react-native-reanimated";
 
 interface SwipeActionBoxProps {
   type: "delete" | "keep";
@@ -8,40 +10,68 @@ interface SwipeActionBoxProps {
 }
 
 export function SwipeActionBox({ type, translateX }: SwipeActionBoxProps) {
-  const animatedStyle = useAnimatedStyle(() => ({
-    opacity:
-      type === "delete"
-        ? translateX.value < -20
-          ? 1
-          : 0
-        : translateX.value > 20
-        ? 1
-        : 0,
-    transform: [
-      {
-        scale:
-          type === "delete"
-            ? translateX.value < -20
-              ? 1
-              : 0.8
-            : translateX.value > 20
-            ? 1
-            : 0.8,
-      },
-    ],
-  }));
+  const hasTriggeredHaptic = useRef(false); // Track haptic feedback state
+
+  const triggerHapticFeedback = () => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+  };
+
+  const animatedStyle = useAnimatedStyle(() => {
+    const isDelete = type === "delete";
+    const threshold = isDelete ? -100 : 100;
+
+    if (
+      (isDelete &&
+        translateX.value < threshold &&
+        !hasTriggeredHaptic.current) ||
+      (!isDelete && translateX.value > threshold && !hasTriggeredHaptic.current)
+    ) {
+      runOnJS(triggerHapticFeedback)();
+      hasTriggeredHaptic.current = true;
+    }
+
+    if (
+      (isDelete &&
+        translateX.value >= threshold &&
+        hasTriggeredHaptic.current) ||
+      (!isDelete && translateX.value <= threshold && hasTriggeredHaptic.current)
+    ) {
+      hasTriggeredHaptic.current = false;
+    }
+    const isSwipeActive = isDelete
+      ? translateX.value < 0
+      : translateX.value > 0;
+
+    return {
+      opacity: isSwipeActive ? 1 : 0,
+      backgroundColor: isDelete
+        ? translateX.value < threshold
+          ? "#ff4d4d"
+          : "#B0B0B0"
+        : translateX.value > threshold
+        ? "#4caf50"
+        : "#B0B0B0",
+    };
+  });
 
   return (
-    <Animated.View
-      style={[
-        styles.container,
-        type === "delete" ? styles.deleteBox : styles.keepBox,
-        animatedStyle,
-      ]}
-    >
-      <Text style={type === "delete" ? styles.deleteText : styles.keepText}>
-        {type === "delete" ? "Delete" : "Keep"}
-      </Text>
+    <Animated.View style={[styles.container, animatedStyle]}>
+      <View
+        style={[
+          styles.textContainer,
+          type === "delete" ? styles.deleteAlignment : styles.keepAlignment,
+        ]}
+      >
+        <Text
+          style={type === "delete" ? styles.deleteText : styles.keepText}
+          accessibilityLabel={
+            type === "delete" ? t("delete_action") : t("keep_action")
+          }
+          accessibilityRole="text"
+        >
+          {type === "delete" ? t("delete") : t("keep")}
+        </Text>
+      </View>
     </Animated.View>
   );
 }
@@ -52,13 +82,16 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     paddingHorizontal: 20,
   },
-  deleteBox: {
-    alignItems: "flex-end",
-    backgroundColor: "#ff4d4d",
+  textContainer: {
+    justifyContent: "center",
   },
-  keepBox: {
+  deleteAlignment: {
+    alignItems: "flex-end",
+    paddingRight: 20,
+  },
+  keepAlignment: {
     alignItems: "flex-start",
-    backgroundColor: "#4caf50",
+    paddingLeft: 20,
   },
   deleteText: {
     color: "#fff",

@@ -1,4 +1,3 @@
-import * as Haptics from "expo-haptics";
 import { create } from "zustand";
 import { Comment } from "../types/comment";
 
@@ -46,13 +45,10 @@ export const useModerationStore = create<ModerationState>((set) => ({
     }));
 
     if (action === "keep") {
-      Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
       console.log(`Comment ${id} has been kept.`);
     } else if (action === "delete") {
-      Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
       console.log(`Comment ${id} has been deleted.`);
     } else if (action === "hide") {
-      Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
       console.log(`Comment ${id} has been hidden.`);
     }
   },
