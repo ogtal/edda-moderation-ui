@@ -8,18 +8,11 @@ import Animated, {
   useSharedValue,
   withSpring,
 } from "react-native-reanimated";
+import { Comment } from "../types/comment";
 import { CommentCardButtons } from "./CommentCardButtons";
 import { CommentCardContent } from "./CommentCardContent";
 import { CommentDetailsModal } from "./CommentDetailsModal";
 import { SwipeActionBox } from "./SwipeActionBox";
-
-interface Comment {
-  id: string;
-  text: string;
-  isHateful: boolean;
-  author: string;
-  thread: string;
-}
 
 interface CommentCardProps {
   comment: Comment;

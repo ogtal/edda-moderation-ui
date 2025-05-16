@@ -1,14 +1,6 @@
 import * as Haptics from "expo-haptics";
 import { create } from "zustand";
-
-interface Comment {
-  id: string;
-  text: string;
-  author: string;
-  thread: string;
-  isHateful: boolean;
-  time: string;
-}
+import { Comment } from "../types/comment";
 
 interface ModerationState {
   comments: Comment[];
