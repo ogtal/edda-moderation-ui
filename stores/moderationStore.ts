@@ -3,12 +3,17 @@ import { Comment } from "../types/comment";
 
 interface ModerationState {
   comments: Comment[];
+  loading: boolean;
   fetchComments: () => Promise<void>;
-  moderateComment: (id: string, action: "keep" | "delete" | "hide") => void;
+  moderateComment: (
+    id: string,
+    action: "keep" | "delete" | "hide"
+  ) => Promise<void>;
 }
 
-export const useModerationStore = create<ModerationState>((set) => ({
+export const useModerationStore = create<ModerationState>((set, get) => ({
   comments: [],
+  loading: false, // Track loading state
   fetchComments: async () => {
     try {
       const response = await fetch(
@@ -34,22 +39,36 @@ export const useModerationStore = create<ModerationState>((set) => ({
       console.error("Failed to fetch comments:", error);
     }
   },
-  moderateComment: (id, action) => {
-    console.log(`Moderating comment ${id} with action: ${action}`);
+  moderateComment: async (id, action) => {
+    const previousComments = get().comments;
 
+    // Optimistically update the UI
     set((state) => ({
-      comments: state.comments
-        .filter((comment) => (action === "delete" ? comment.id !== id : true))
-        .filter((comment) => (action === "keep" ? comment.id !== id : true))
-        .filter((comment) => (action === "hide" ? comment.id !== id : true)),
+      comments: state.comments.filter((comment) => comment.id !== id),
+      loading: true, // Set loading to true
     }));
 
-    if (action === "keep") {
-      console.log(`Comment ${id} has been kept.`);
-    } else if (action === "delete") {
-      console.log(`Comment ${id} has been deleted.`);
-    } else if (action === "hide") {
-      console.log(`Comment ${id} has been hidden.`);
+    try {
+      // Simulate a server request
+      const response = await fetch(
+        `https://jsonplaceholder.typicode.com/comments/${id}`,
+        {
+          method: action === "delete" ? "DELETE" : "POST",
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to moderate comment");
+      }
+
+      console.log(`Comment ${id} successfully ${action}d.`);
+    } catch (error) {
+      console.error(`Failed to ${action} comment ${id}:`, error);
+
+      // Rollback the optimistic update
+      set({ comments: previousComments });
+    } finally {
+      set({ loading: false }); // Reset loading state
     }
   },
 }));
