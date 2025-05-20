@@ -15,12 +15,14 @@ interface CommentDetailsModalProps {
   isVisible: boolean;
   onClose: () => void;
   comment: { id: string; text: string; author: string; thread: string };
+  onModerate: (id: string, action: "keep" | "delete" | "hide") => void;
 }
 
 export function CommentDetailsModal({
   isVisible,
   onClose,
   comment,
+  onModerate,
 }: CommentDetailsModalProps) {
   const { height } = useWindowDimensions();
   const slideAnim = useRef(new Animated.Value(height)).current;
@@ -78,8 +80,8 @@ export function CommentDetailsModal({
           <CommentModalButtons
             commentId={comment.id}
             onModerate={(id, action) => {
-              // Handle moderation actions here
-              console.log(`Action: ${action} on comment ID: ${id}`);
+              onModerate(id, action);
+              onClose();
             }}
           />
 

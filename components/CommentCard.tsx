@@ -108,6 +108,7 @@ export default function CommentCard({ comment, onModerate }: CommentCardProps) {
         isVisible={isModalVisible}
         onClose={handleCloseModal}
         comment={comment}
+        onModerate={onModerate}
       />
     </>
   );
