@@ -1,7 +1,6 @@
 import { t } from "i18next";
 import React, { useEffect, useState } from "react";
 import { FlatList, RefreshControl, StyleSheet, Text, View } from "react-native";
-import { GestureHandlerRootView } from "react-native-gesture-handler";
 import CommentCard from "../../components/CommentCard";
 import FilterModal from "../../components/FilterModal";
 import Header from "../../components/Header";
@@ -33,7 +32,7 @@ export default function Index() {
   };
 
   return (
-    <GestureHandlerRootView style={styles.container}>
+    <View style={styles.container}>
       <Header onFilterPress={() => setFilterModalVisible(true)} />
       {filteredComments.length > 0 ? (
         <FlatList
@@ -64,7 +63,7 @@ export default function Index() {
         onClose={() => setFilterModalVisible(false)}
         onSelectFilter={setFilter}
       />
-    </GestureHandlerRootView>
+    </View>
   );
 }
 
