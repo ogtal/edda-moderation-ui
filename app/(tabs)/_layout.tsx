@@ -16,8 +16,6 @@ export default function TabLayout() {
           tabBarStyle: {
             backgroundColor: colors.primary100,
             borderTopWidth: 0,
-            paddingTop: 15,
-            height: 120,
           },
 
           tabBarActiveTintColor: colors.primary,
@@ -41,7 +39,7 @@ export default function TabLayout() {
               <Ionicons
                 name={focused ? "home" : "home-outline"}
                 color={color}
-                size={32}
+                size={24}
               />
             ),
             sceneStyle: {
@@ -57,7 +55,7 @@ export default function TabLayout() {
               <Ionicons
                 name={focused ? "search" : "search-outline"}
                 color={color}
-                size={32}
+                size={24}
               />
             ),
             sceneStyle: {
@@ -73,7 +71,7 @@ export default function TabLayout() {
               <Ionicons
                 name={focused ? "help-circle" : "help-circle-outline"}
                 color={color}
-                size={32}
+                size={24}
               />
             ),
             sceneStyle: {
