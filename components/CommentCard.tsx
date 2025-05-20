@@ -11,7 +11,6 @@ import Animated, {
   withTiming,
 } from "react-native-reanimated";
 import { Comment } from "../types/comment";
-import { CommentCardButtons } from "./CommentCardButtons";
 import { CommentCardContent } from "./CommentCardContent";
 import { CommentDetailsModal } from "./CommentDetailsModal";
 import { SwipeActionBox } from "./SwipeActionBox";
@@ -94,10 +93,10 @@ export default function CommentCard({ comment, onModerate }: CommentCardProps) {
         <GestureDetector gesture={composedGesture}>
           <Animated.View style={[styles.commentContainer, animatedStyle]}>
             <CommentCardContent comment={comment} />
-            <CommentCardButtons
+            {/* <CommentCardButtons
               commentId={comment.id}
               onModerate={onModerate}
-            />
+            /> */}
             {/* Grey Fading Effect */}
             <Animated.View style={[styles.fadeOverlay, fadeStyle]} />
           </Animated.View>

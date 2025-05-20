@@ -27,7 +27,7 @@ export function CommentCardContent({ comment }: CommentCardContentProps) {
         <Text style={styles.authorText}>{comment.author}</Text>
         <Text style={styles.timeText}>{formatMailStyleDate(comment.time)}</Text>
       </View>
-      <Text style={styles.commentText} numberOfLines={2}>
+      <Text style={styles.commentText} numberOfLines={4}>
         {comment.text}
       </Text>
     </View>

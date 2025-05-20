@@ -7,7 +7,7 @@ export default function RootLayout() {
   return (
     <Stack
       screenOptions={{
-        navigationBarColor: colors.fadedPrimary,
+        navigationBarColor: colors.primary100,
       }}
     >
       <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
