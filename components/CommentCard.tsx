@@ -1,3 +1,4 @@
+import * as Haptics from "expo-haptics";
 import React, { useState } from "react";
 import { StyleSheet, useWindowDimensions } from "react-native";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
@@ -24,6 +25,7 @@ export default function CommentCard({ comment, onModerate }: CommentCardProps) {
   const translateX = useSharedValue(0);
   const [isModalVisible, setModalVisible] = useState(false);
   const dragOccurred = useSharedValue(false);
+  const fadeProgress = useSharedValue(0);
   const { width } = useWindowDimensions();
 
   const panGesture = Gesture.Pan()
@@ -39,10 +41,12 @@ export default function CommentCard({ comment, onModerate }: CommentCardProps) {
     })
     .onEnd(() => {
       if (translateX.value < -100) {
+        runOnJS(Haptics.impactAsync)(Haptics.ImpactFeedbackStyle.Medium);
         translateX.value = withTiming(-width, { duration: 150 }, () => {
           runOnJS(onModerate)(comment.id, "delete");
         });
       } else if (translateX.value > 100) {
+        runOnJS(Haptics.impactAsync)(Haptics.ImpactFeedbackStyle.Medium);
         translateX.value = withTiming(width, { duration: 150 }, () => {
           runOnJS(onModerate)(comment.id, "keep");
         });
@@ -51,16 +55,27 @@ export default function CommentCard({ comment, onModerate }: CommentCardProps) {
       }
     });
 
-  const tapGesture = Gesture.Tap().onEnd((_event, success) => {
-    if (success && !dragOccurred.value) {
+  const longPressGesture = Gesture.LongPress()
+    .minDuration(500)
+    .onBegin(() => {
+      fadeProgress.value = withTiming(1, { duration: 300 });
+    })
+    .onStart(() => {
+      runOnJS(Haptics.selectionAsync)();
       runOnJS(setModalVisible)(true);
-    }
-  });
+    })
+    .onFinalize(() => {
+      fadeProgress.value = 0;
+    });
 
-  const composedGesture = Gesture.Exclusive(panGesture, tapGesture);
+  const composedGesture = Gesture.Exclusive(panGesture, longPressGesture);
 
   const animatedStyle = useAnimatedStyle(() => ({
     transform: [{ translateX: translateX.value }],
+  }));
+
+  const fadeStyle = useAnimatedStyle(() => ({
+    opacity: fadeProgress.value,
   }));
 
   const handleCloseModal = () => setModalVisible(false);
@@ -69,7 +84,7 @@ export default function CommentCard({ comment, onModerate }: CommentCardProps) {
     <>
       <Animated.View
         style={styles.container}
-        layout={LinearTransition.duration(250)}
+        layout={LinearTransition.duration(200)}
       >
         {/* Swipe Action Boxes */}
         <SwipeActionBox type="delete" translateX={translateX} />
@@ -83,6 +98,8 @@ export default function CommentCard({ comment, onModerate }: CommentCardProps) {
               commentId={comment.id}
               onModerate={onModerate}
             />
+            {/* Grey Fading Effect */}
+            <Animated.View style={[styles.fadeOverlay, fadeStyle]} />
           </Animated.View>
         </GestureDetector>
       </Animated.View>
@@ -110,5 +127,10 @@ const styles = StyleSheet.create({
     paddingVertical: 16,
     paddingHorizontal: 16,
     borderBottomWidth: 1,
+  },
+  fadeOverlay: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: "rgba(0, 0, 0, 0.1)",
+    zIndex: 2,
   },
 });
