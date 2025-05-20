@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { StyleSheet } from "react-native";
+import { StyleSheet, useWindowDimensions } from "react-native";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
 import Animated, {
   Layout,
@@ -7,6 +7,7 @@ import Animated, {
   useAnimatedStyle,
   useSharedValue,
   withSpring,
+  withTiming,
 } from "react-native-reanimated";
 import { Comment } from "../types/comment";
 import { CommentCardButtons } from "./CommentCardButtons";
@@ -23,6 +24,7 @@ export default function CommentCard({ comment, onModerate }: CommentCardProps) {
   const translateX = useSharedValue(0);
   const [isModalVisible, setModalVisible] = useState(false);
   const dragOccurred = useSharedValue(false);
+  const { width } = useWindowDimensions();
 
   const panGesture = Gesture.Pan()
     .minDistance(10)
@@ -37,11 +39,16 @@ export default function CommentCard({ comment, onModerate }: CommentCardProps) {
     })
     .onEnd(() => {
       if (translateX.value < -100) {
-        runOnJS(onModerate)(comment.id, "delete");
+        translateX.value = withTiming(-width, { duration: 150 }, () => {
+          runOnJS(onModerate)(comment.id, "delete");
+        });
       } else if (translateX.value > 100) {
-        runOnJS(onModerate)(comment.id, "keep");
+        translateX.value = withTiming(width, { duration: 150 }, () => {
+          runOnJS(onModerate)(comment.id, "keep");
+        });
+      } else {
+        translateX.value = withSpring(0);
       }
-      translateX.value = withSpring(0);
     });
 
   const tapGesture = Gesture.Tap().onEnd((_event, success) => {
