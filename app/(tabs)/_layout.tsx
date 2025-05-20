@@ -19,6 +19,7 @@ export default function TabLayout() {
             paddingTop: 15,
             height: 120,
           },
+
           tabBarActiveTintColor: colors.primary,
           headerRight: () => (
             <TouchableOpacity
@@ -44,7 +45,7 @@ export default function TabLayout() {
               />
             ),
             sceneStyle: {
-              backgroundColor: colors.platinum,
+              backgroundColor: colors.white,
             },
           }}
         />
@@ -59,6 +60,9 @@ export default function TabLayout() {
                 size={32}
               />
             ),
+            sceneStyle: {
+              backgroundColor: colors.white,
+            },
           }}
         />
         <Tabs.Screen
@@ -72,6 +76,9 @@ export default function TabLayout() {
                 size={32}
               />
             ),
+            sceneStyle: {
+              backgroundColor: colors.white,
+            },
           }}
         />
       </Tabs>

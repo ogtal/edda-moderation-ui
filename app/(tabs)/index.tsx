@@ -42,12 +42,7 @@ export default function Index() {
             <CommentCard comment={item} onModerate={handleModeration} />
           )}
           refreshControl={
-            <RefreshControl
-              refreshing={refreshing}
-              onRefresh={onRefresh}
-              tintColor="#007BFF" // Optional iOS style
-              colors={["#007BFF"]} // Android spinner colors
-            />
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
           }
         />
       ) : (
@@ -70,7 +65,6 @@ export default function Index() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#ffffff",
   },
   emptyState: {
     flex: 1,
