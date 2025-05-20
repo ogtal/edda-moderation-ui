@@ -6,6 +6,7 @@ import {
   StyleSheet,
   Text,
   TextStyle,
+  View,
   ViewStyle,
 } from "react-native";
 
@@ -31,38 +32,41 @@ export function IconActionButton({
   buttonStyle,
 }: IconActionButtonProps) {
   return (
-    <Pressable
-      onPress={onPress}
-      style={({ pressed }) => {
-        const baseStyles = [
-          styles.button,
-          { backgroundColor },
-          width ? { width } : null,
-          buttonStyle,
-          pressed ? styles.pressed : null,
-        ];
-
-        return baseStyles.filter(Boolean);
-      }}
+    <View
+      style={[
+        styles.buttonWrapper,
+        width ? { width } : null,
+        { backgroundColor },
+        buttonStyle,
+      ]}
     >
-      <Ionicons
-        name={icon}
-        size={20}
-        style={[styles.icon, { color: iconColor }]}
-      />
-      <Text style={[styles.label, labelStyle]}>{label}</Text>
-    </Pressable>
+      <Pressable
+        onPress={onPress}
+        android_ripple={{ color: colors.primary200 }}
+        style={({ pressed }) => [styles.pressable, pressed && styles.pressed]}
+      >
+        <Ionicons
+          name={icon}
+          size={20}
+          style={[styles.icon, { color: iconColor }]}
+        />
+        <Text style={[styles.label, labelStyle]}>{label}</Text>
+      </Pressable>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
-  button: {
+  buttonWrapper: {
+    borderRadius: 10,
+    overflow: "hidden", // CRITICAL for clipping ripple
+    marginHorizontal: 6,
+  },
+  pressable: {
     alignItems: "center",
     justifyContent: "center",
     paddingVertical: 16,
     paddingHorizontal: 12,
-    borderRadius: 10,
-    marginHorizontal: 6,
   },
   icon: {
     marginBottom: 6,
@@ -73,7 +77,6 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   pressed: {
-    backgroundColor: colors.primary200,
     transform: [{ scale: 0.98 }],
   },
 });
