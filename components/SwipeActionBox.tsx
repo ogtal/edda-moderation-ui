@@ -3,7 +3,12 @@ import * as Haptics from "expo-haptics";
 import { t } from "i18next";
 import React, { useRef } from "react";
 import { StyleSheet, View } from "react-native";
-import Animated, { runOnJS, useAnimatedStyle } from "react-native-reanimated";
+import Animated, {
+  runOnJS,
+  useAnimatedStyle,
+  useSharedValue,
+  withSpring,
+} from "react-native-reanimated";
 
 interface SwipeActionBoxProps {
   type: "delete" | "keep";
@@ -11,9 +16,10 @@ interface SwipeActionBoxProps {
 }
 
 export function SwipeActionBox({ type, translateX }: SwipeActionBoxProps) {
-  const hasTriggeredHaptic = useRef(false); // Track haptic feedback state
+  const hasTriggeredHaptic = useRef(false);
+  const iconScale = useSharedValue(1);
 
-  const triggerHapticFeedback = () => {
+  const triggerFeedback = () => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
   };
 
@@ -21,39 +27,35 @@ export function SwipeActionBox({ type, translateX }: SwipeActionBoxProps) {
     const isDelete = type === "delete";
     const threshold = isDelete ? -100 : 100;
 
-    if (
-      (isDelete &&
-        translateX.value < threshold &&
-        !hasTriggeredHaptic.current) ||
-      (!isDelete && translateX.value > threshold && !hasTriggeredHaptic.current)
-    ) {
-      runOnJS(triggerHapticFeedback)();
+    const crossed =
+      (isDelete && translateX.value < threshold) ||
+      (!isDelete && translateX.value > threshold);
+
+    if (crossed && !hasTriggeredHaptic.current) {
+      runOnJS(triggerFeedback)();
+      iconScale.value = withSpring(1.1, {}, () => {
+        iconScale.value = withSpring(1);
+      });
       hasTriggeredHaptic.current = true;
     }
 
-    if (
-      (isDelete &&
-        translateX.value >= threshold &&
-        hasTriggeredHaptic.current) ||
-      (!isDelete && translateX.value <= threshold && hasTriggeredHaptic.current)
-    ) {
+    if (!crossed && hasTriggeredHaptic.current) {
       hasTriggeredHaptic.current = false;
     }
+
     const isSwipeActive = isDelete
       ? translateX.value < 0
       : translateX.value > 0;
 
     return {
       opacity: isSwipeActive ? 1 : 0,
-      backgroundColor: isDelete
-        ? translateX.value < threshold
-          ? "#ff4d4d"
-          : "#B0B0B0"
-        : translateX.value > threshold
-        ? "#4caf50"
-        : "#B0B0B0",
+      backgroundColor: crossed ? (isDelete ? "#ff4d4d" : "#4caf50") : "#B0B0B0",
     };
   });
+
+  const iconStyle = useAnimatedStyle(() => ({
+    transform: [{ scale: iconScale.value }],
+  }));
 
   return (
     <Animated.View style={[styles.container, animatedStyle]}>
@@ -63,15 +65,17 @@ export function SwipeActionBox({ type, translateX }: SwipeActionBoxProps) {
           type === "delete" ? styles.deleteAlignment : styles.keepAlignment,
         ]}
       >
-        <Ionicons
-          name={type === "delete" ? "trash" : "checkmark"}
-          size={24}
-          color="#fff"
-          accessibilityLabel={
-            type === "delete" ? t("delete_action") : t("keep_action")
-          }
-          accessibilityRole="image"
-        />
+        <Animated.View style={iconStyle}>
+          <Ionicons
+            name={type === "delete" ? "trash" : "checkmark"}
+            size={24}
+            color="#fff"
+            accessibilityLabel={
+              type === "delete" ? t("delete_action") : t("keep_action")
+            }
+            accessibilityRole="image"
+          />
+        </Animated.View>
       </View>
     </Animated.View>
   );
