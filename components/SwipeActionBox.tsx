@@ -1,7 +1,8 @@
+import { Ionicons } from "@expo/vector-icons";
 import * as Haptics from "expo-haptics";
 import { t } from "i18next";
 import React, { useRef } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import Animated, { runOnJS, useAnimatedStyle } from "react-native-reanimated";
 
 interface SwipeActionBoxProps {
@@ -58,19 +59,19 @@ export function SwipeActionBox({ type, translateX }: SwipeActionBoxProps) {
     <Animated.View style={[styles.container, animatedStyle]}>
       <View
         style={[
-          styles.textContainer,
+          styles.iconContainer,
           type === "delete" ? styles.deleteAlignment : styles.keepAlignment,
         ]}
       >
-        <Text
-          style={type === "delete" ? styles.deleteText : styles.keepText}
+        <Ionicons
+          name={type === "delete" ? "trash" : "checkmark"}
+          size={24}
+          color="#fff"
           accessibilityLabel={
             type === "delete" ? t("delete_action") : t("keep_action")
           }
-          accessibilityRole="text"
-        >
-          {type === "delete" ? t("delete") : t("keep")}
-        </Text>
+          accessibilityRole="image"
+        />
       </View>
     </Animated.View>
   );
@@ -82,7 +83,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     paddingHorizontal: 20,
   },
-  textContainer: {
+  iconContainer: {
     justifyContent: "center",
   },
   deleteAlignment: {
@@ -92,15 +93,5 @@ const styles = StyleSheet.create({
   keepAlignment: {
     alignItems: "flex-start",
     paddingLeft: 20,
-  },
-  deleteText: {
-    color: "#fff",
-    fontWeight: "bold",
-    fontSize: 16,
-  },
-  keepText: {
-    color: "#fff",
-    fontWeight: "bold",
-    fontSize: 16,
   },
 });
