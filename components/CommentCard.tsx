@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { StyleSheet, useWindowDimensions } from "react-native";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
 import Animated, {
-  Layout,
+  LinearTransition,
   runOnJS,
   useAnimatedStyle,
   useSharedValue,
@@ -69,7 +69,7 @@ export default function CommentCard({ comment, onModerate }: CommentCardProps) {
     <>
       <Animated.View
         style={styles.container}
-        layout={Layout.springify()} // Enable layout animation
+        layout={LinearTransition.duration(250)}
       >
         {/* Swipe Action Boxes */}
         <SwipeActionBox type="delete" translateX={translateX} />
