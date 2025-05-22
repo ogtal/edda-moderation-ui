@@ -1,3 +1,5 @@
+import { t } from "i18next";
+
 /**
  * Formats a date string into a "mail-style" format.
  * - Same day: "HH:MM"
@@ -35,10 +37,16 @@ export function formatMailStyleDate(isoString: string): string {
   if (isSameDay(date, now)) {
     return date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
   } else if (isYesterday(date, now)) {
-    return "Yesterday";
+    return t("yesterday") || "Yesterday";
   } else if (isSameWeek(date, now)) {
-    return date.toLocaleDateString(undefined, { weekday: "long" });
+    return capitalizeFirstLetter(
+      date.toLocaleDateString(undefined, { weekday: "long" })
+    );
   } else {
     return date.toLocaleDateString();
   }
+}
+
+function capitalizeFirstLetter(val: string) {
+  return String(val).charAt(0).toUpperCase() + String(val).slice(1);
 }
