@@ -48,14 +48,14 @@ const styles = StyleSheet.create<{
     marginLeft: 12,
   },
   icon: {
-    color: colors.charchoal,
+    color: colors.baseDark.DEFAULT,
   },
   label: {
     marginLeft: 4,
-    color: colors.charchoal,
+    color: colors.baseDark.DEFAULT,
     fontSize: 14,
   },
   pressed: {
-    backgroundColor: colors.fadedPrimary,
+    backgroundColor: colors.primary[200],
   },
 });

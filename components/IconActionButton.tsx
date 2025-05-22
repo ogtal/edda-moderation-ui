@@ -26,8 +26,8 @@ export function IconActionButton({
   icon,
   onPress,
   width,
-  backgroundColor = "#fff",
-  iconColor = "#161616",
+  backgroundColor = colors.baseDark[100],
+  iconColor = colors.primary.DEFAULT,
   labelStyle,
   buttonStyle,
 }: IconActionButtonProps) {
@@ -42,7 +42,7 @@ export function IconActionButton({
     >
       <Pressable
         onPress={onPress}
-        android_ripple={{ color: colors.primary200 }}
+        android_ripple={{ color: colors.primary[200] }}
         style={({ pressed }) => [styles.pressable, pressed && styles.pressed]}
       >
         <Ionicons

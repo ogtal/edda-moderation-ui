@@ -9,7 +9,7 @@ export default function RootLayout() {
     <GestureHandlerRootView style={{ flex: 1 }}>
       <Stack
         screenOptions={{
-          navigationBarColor: colors.primary100,
+          navigationBarColor: colors.surfaceLight.DEFAULT,
         }}
       >
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />

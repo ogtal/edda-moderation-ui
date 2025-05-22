@@ -1,3 +1,4 @@
+import colors from "@/theme/colors";
 import { t } from "i18next";
 import React from "react";
 import { Modal, StyleSheet, Text, TouchableOpacity, View } from "react-native";
@@ -85,7 +86,7 @@ const styles = StyleSheet.create({
   },
   modalContent: {
     width: "80%",
-    backgroundColor: "#ffffff",
+    backgroundColor: colors.surfaceLight[500],
     borderRadius: 8,
     padding: 16,
     alignItems: "center",
@@ -99,27 +100,27 @@ const styles = StyleSheet.create({
     padding: 12,
     marginBottom: 8,
     width: "100%",
-    backgroundColor: "#f0f0f0",
+    backgroundColor: colors.surfaceLight[200],
     borderRadius: 8,
     alignItems: "center",
   },
   activeFilterOption: {
-    backgroundColor: "#007BFF",
+    backgroundColor: colors.info[500],
   },
   filterOptionText: {
     fontSize: 16,
-    color: "#000",
+    color: colors.baseDark[900],
   },
   closeButton: {
     marginTop: 16,
     padding: 12,
-    backgroundColor: "#007BFF",
+    backgroundColor: colors.primary[500],
     borderRadius: 8,
     width: "100%",
     alignItems: "center",
   },
   closeButtonText: {
-    color: "#ffffff",
+    color: colors.surfaceLight[500],
     fontSize: 16,
   },
 });

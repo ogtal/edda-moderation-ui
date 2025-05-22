@@ -13,7 +13,7 @@
   "settings": "Indstillinger",
   "faq-page": "FAQ-side",
   "settings_menu": "Indstillinger",
-  "search": "Søge",
+  "search": "Søg",
   "faq": "FAQ",
   "navigate_to_settings": "Naviger til indstillinger",
   "navigate to privacy_policy": "Naviger til privatlivspolitikken",
@@ -23,5 +23,6 @@
   "search_placeholder": "Søg efter kommentarer...",
   "no_comments": "Ingen kommentarer",
   "loading": "Indlæser",
-  "comment_details": "Kommentaroplysninger"
+  "comment_details": "Kommentaroplysninger",
+  "hateful_badge": "Had"
 }

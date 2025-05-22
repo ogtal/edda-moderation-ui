@@ -1,3 +1,4 @@
+import colors from "@/theme/colors";
 import { t } from "i18next";
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
@@ -22,9 +23,16 @@ export function CommentCardContent({ comment }: CommentCardContentProps) {
       testID={`comment-${comment.id}`}
     >
       <View style={styles.header}>
-        {/* Red dot for hateful comments */}
-        {comment.isHateful && <View style={styles.redDot} />}
-        <Text style={styles.authorText}>{comment.author}</Text>
+        <View style={styles.authorContainer}>
+          <Text style={styles.authorText}>{comment.author}</Text>
+          {comment.isHateful && (
+            <View style={styles.hatefulBadge}>
+              <Text style={styles.hatefulBadgeText}>
+                {t("hateful_badge") || "Hateful"}
+              </Text>
+            </View>
+          )}
+        </View>
         <Text style={styles.timeText}>{formatMailStyleDate(comment.time)}</Text>
       </View>
       <Text style={styles.commentText} numberOfLines={4}>
@@ -43,22 +51,30 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-between",
   },
-  redDot: {
-    width: 8,
-    height: 8,
-    borderRadius: 4,
-    backgroundColor: "red",
-    marginRight: 8,
+  authorContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  hatefulBadge: {
+    backgroundColor: colors.primary.DEFAULT,
+    borderRadius: 12,
+    paddingHorizontal: 8,
+    paddingVertical: 2,
+    marginLeft: 8,
+  },
+  hatefulBadgeText: {
+    color: colors.surfaceLight[900],
+    fontSize: 10,
+    fontWeight: "600",
+    textTransform: "uppercase",
   },
   authorText: {
     fontSize: 16,
     fontWeight: "bold",
-    flex: 1,
   },
   timeText: {
     fontSize: 12,
-    color: "#888",
-    marginLeft: 8,
+    color: colors.baseDark[500],
   },
   commentText: {
     fontSize: 14,

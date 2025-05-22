@@ -1,3 +1,4 @@
+import colors from "@/theme/colors";
 import { Ionicons } from "@expo/vector-icons";
 import * as Haptics from "expo-haptics";
 import { t } from "i18next";
@@ -49,7 +50,11 @@ export function SwipeActionBox({ type, translateX }: SwipeActionBoxProps) {
 
     return {
       opacity: isSwipeActive ? 1 : 0,
-      backgroundColor: crossed ? (isDelete ? "#ff4d4d" : "#4caf50") : "#B0B0B0",
+      backgroundColor: crossed
+        ? isDelete
+          ? colors.error.DEFAULT
+          : colors.success.DEFAULT
+        : colors.baseDark.DEFAULT,
     };
   });
 
@@ -69,7 +74,7 @@ export function SwipeActionBox({ type, translateX }: SwipeActionBoxProps) {
           <Ionicons
             name={type === "delete" ? "trash" : "checkmark"}
             size={24}
-            color="#fff"
+            color={colors.surfaceLight[500]}
             accessibilityLabel={
               type === "delete" ? t("delete_action") : t("keep_action")
             }

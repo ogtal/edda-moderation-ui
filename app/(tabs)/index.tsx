@@ -5,6 +5,7 @@ import CommentCard from "../../components/CommentCard";
 import FilterModal from "../../components/FilterModal";
 import Header from "../../components/Header";
 import { useModerationStore } from "../../stores/moderationStore";
+import colors from "../../theme/colors";
 
 export default function Index() {
   const { comments, fetchComments, moderateComment } = useModerationStore();
@@ -33,25 +34,26 @@ export default function Index() {
 
   return (
     <View style={styles.container}>
-      <Header onFilterPress={() => setFilterModalVisible(true)} />
-      {filteredComments.length > 0 ? (
-        <FlatList
-          data={filteredComments}
-          keyExtractor={(item) => item.id}
-          renderItem={({ item }) => (
-            <CommentCard comment={item} onModerate={handleModeration} />
-          )}
-          refreshControl={
-            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-          }
-        />
-      ) : (
-        <View style={styles.emptyState}>
-          <Text style={styles.emptyText}>
-            {t("no_comments") || "No comments to display"}
-          </Text>
-        </View>
-      )}
+      <FlatList
+        data={filteredComments}
+        keyExtractor={(item) => item.id}
+        renderItem={({ item }) => (
+          <CommentCard comment={item} onModerate={handleModeration} />
+        )}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
+        ListHeaderComponent={
+          <Header onFilterPress={() => setFilterModalVisible(true)} />
+        }
+        ListEmptyComponent={
+          <View style={styles.emptyState}>
+            <Text style={styles.emptyText}>
+              {t("no_comments") || "No comments to display"}
+            </Text>
+          </View>
+        }
+      />
       <FilterModal
         visible={isFilterModalVisible}
         filter={filter}
@@ -73,6 +75,6 @@ const styles = StyleSheet.create({
   },
   emptyText: {
     fontSize: 16,
-    color: "#888888",
+    color: colors.secondary.DEFAULT,
   },
 });

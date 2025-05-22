@@ -1,3 +1,4 @@
+import colors from "@/theme/colors";
 import * as Haptics from "expo-haptics";
 import React, { useState } from "react";
 import { StyleSheet, useWindowDimensions } from "react-native";
@@ -117,20 +118,20 @@ export default function CommentCard({ comment, onModerate }: CommentCardProps) {
 const styles = StyleSheet.create({
   container: {
     position: "relative",
-    backgroundColor: "#fff",
+    backgroundColor: colors.surfaceLight[500],
     overflow: "hidden",
   },
   commentContainer: {
-    backgroundColor: "#fff",
+    backgroundColor: colors.surfaceLight[500],
     zIndex: 1,
-    borderBottomColor: "#ddd",
+    borderBottomColor: colors.baseDark[100],
     paddingVertical: 16,
     paddingHorizontal: 16,
     borderBottomWidth: 1,
   },
   fadeOverlay: {
     ...StyleSheet.absoluteFillObject,
-    backgroundColor: "rgba(0, 0, 0, 0.1)",
+    backgroundColor: colors.baseDark[100],
     zIndex: 2,
   },
 });

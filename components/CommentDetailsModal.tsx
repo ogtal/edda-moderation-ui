@@ -1,3 +1,4 @@
+import colors from "@/theme/colors";
 import { t } from "i18next";
 import React, { useEffect, useRef } from "react";
 import {
@@ -115,7 +116,7 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 16,
     borderTopRightRadius: 16,
     overflow: "hidden",
-    backgroundColor: "#fff",
+    backgroundColor: colors.surfaceLight[500],
   },
   header: {
     flexDirection: "row",
@@ -123,7 +124,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     padding: 16,
     borderBottomWidth: 1,
-    borderBottomColor: "#ddd",
+    borderBottomColor: colors.baseDark[100],
   },
   modalTitle: {
     fontSize: 18,
@@ -133,7 +134,7 @@ const styles = StyleSheet.create({
     padding: 8,
   },
   closeButtonText: {
-    color: "#007BFF",
+    color: colors.primary.DEFAULT,
     fontSize: 16,
   },
   content: {

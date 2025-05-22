@@ -14,11 +14,11 @@ export default function TabLayout() {
       <Tabs
         screenOptions={{
           tabBarStyle: {
-            backgroundColor: colors.primary100,
+            backgroundColor: colors.surfaceLight.DEFAULT,
             borderTopWidth: 0,
           },
 
-          tabBarActiveTintColor: colors.primary,
+          tabBarActiveTintColor: colors.primary.DEFAULT,
           headerRight: () => (
             <TouchableOpacity
               onPress={() => setDropdownVisible(true)}
@@ -43,7 +43,10 @@ export default function TabLayout() {
               />
             ),
             sceneStyle: {
-              backgroundColor: colors.white,
+              backgroundColor: colors.surfaceLight.DEFAULT,
+            },
+            headerStyle: {
+              backgroundColor: colors.surfaceLight.DEFAULT,
             },
           }}
         />
@@ -59,7 +62,10 @@ export default function TabLayout() {
               />
             ),
             sceneStyle: {
-              backgroundColor: colors.white,
+              backgroundColor: colors.surfaceLight.DEFAULT,
+            },
+            headerStyle: {
+              backgroundColor: colors.surfaceLight.DEFAULT,
             },
           }}
         />
@@ -75,7 +81,10 @@ export default function TabLayout() {
               />
             ),
             sceneStyle: {
-              backgroundColor: colors.white,
+              backgroundColor: colors.surfaceLight.DEFAULT,
+            },
+            headerStyle: {
+              backgroundColor: colors.surfaceLight.DEFAULT,
             },
           }}
         />

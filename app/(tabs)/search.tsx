@@ -1,3 +1,4 @@
+import colors from "@/theme/colors";
 import { t } from "i18next";
 import React, { useState } from "react";
 import { FlatList, StyleSheet, Text, TextInput, View } from "react-native";
@@ -26,7 +27,7 @@ export default function Search() {
       <TextInput
         style={styles.searchBar}
         placeholder={t("search_placeholder") || "Search comments..."}
-        placeholderTextColor="#888"
+        placeholderTextColor={colors.baseDark[200]}
         value={query}
         onChangeText={setQuery}
         accessibilityLabel={t("search_input") || "Search input"}
@@ -60,13 +61,13 @@ const styles = StyleSheet.create({
   },
   searchBar: {
     height: 40,
-    borderColor: "#ccc",
+    borderColor: colors.baseDark[200],
     borderWidth: 1,
     borderRadius: 8,
     paddingHorizontal: 12,
     marginBottom: 16,
     fontSize: 16,
-    color: "#333",
+    color: colors.baseDark[900],
   },
   list: {
     paddingBottom: 16,
@@ -78,6 +79,6 @@ const styles = StyleSheet.create({
   },
   emptyText: {
     fontSize: 16,
-    color: "#888888",
+    color: colors.baseDark[500],
   },
 });
