@@ -35,9 +35,6 @@ export function CommentCardButtons({
           label={label}
           icon={icon}
           onPress={() => onModerate(commentId, type)}
-          testID={`comment-button-${type}`}
-          accessibilityLabel={t(`comment_button_${type}`) || label}
-          accessibilityRole="button"
         />
       ))}
     </View>
