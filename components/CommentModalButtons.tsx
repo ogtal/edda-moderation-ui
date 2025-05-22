@@ -47,8 +47,12 @@ export function CommentModalButtons({
           icon={icon}
           onPress={() => onModerate(commentId, type)}
           width={(width - 48) / 3}
-          backgroundColor={colors.primary[200]}
+          backgroundColor={colors.secondary.DEFAULT}
           iconColor={colors.baseDark.DEFAULT}
+          labelStyle={{
+            color: colors.baseDark.DEFAULT,
+            fontSize: 14,
+          }}
         />
       ))}
     </View>

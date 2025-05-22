@@ -42,7 +42,7 @@ export function IconActionButton({
     >
       <Pressable
         onPress={onPress}
-        android_ripple={{ color: colors.primary[200] }}
+        android_ripple={{ color: colors.baseDark[200] }}
         style={({ pressed }) => [styles.pressable, pressed && styles.pressed]}
       >
         <Ionicons
