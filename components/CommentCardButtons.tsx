@@ -35,6 +35,9 @@ export function CommentCardButtons({
           label={label}
           icon={icon}
           onPress={() => onModerate(commentId, type)}
+          testID={`comment-button-${type}`}
+          accessibilityLabel={t(`comment_button_${type}`) || label}
+          accessibilityRole="button"
         />
       ))}
     </View>
@@ -44,8 +47,9 @@ export function CommentCardButtons({
 const styles = StyleSheet.create({
   container: {
     flexDirection: "row",
-    justifyContent: "flex-end",
+    justifyContent: "space-between", // Ensures even spacing between buttons
     alignItems: "center",
     marginTop: 8,
+    paddingHorizontal: 16, // Adds padding to prevent buttons from touching edges
   },
 });

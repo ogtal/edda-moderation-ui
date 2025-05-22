@@ -46,13 +46,10 @@ export function CommentModalButtons({
           label={label}
           icon={icon}
           onPress={() => onModerate(commentId, type)}
-          width={(width - 48) / 3}
+          width={(width - 72) / 3}
           backgroundColor={colors.secondary.DEFAULT}
           iconColor={colors.baseDark.DEFAULT}
-          labelStyle={{
-            color: colors.baseDark.DEFAULT,
-            fontSize: 14,
-          }}
+          labelStyle={styles.labelStyle}
         />
       ))}
     </View>
@@ -62,8 +59,12 @@ export function CommentModalButtons({
 const styles = StyleSheet.create({
   container: {
     flexDirection: "row",
-    justifyContent: "space-around",
-    paddingHorizontal: 16,
+    justifyContent: "space-between",
+    alignItems: "center",
     marginTop: 12,
+  },
+  labelStyle: {
+    color: colors.baseDark.DEFAULT,
+    fontSize: 14,
   },
 });

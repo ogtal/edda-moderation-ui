@@ -1,15 +1,7 @@
-import colors from "@/theme/colors";
 import { t } from "i18next";
-import React, { useEffect, useRef } from "react";
-import {
-  Animated,
-  Modal,
-  Pressable,
-  StyleSheet,
-  Text,
-  View,
-  useWindowDimensions,
-} from "react-native";
+import React from "react";
+import { StyleSheet, Text, View } from "react-native";
+import { BaseModal } from "./BaseModal";
 import { CommentModalButtons } from "./CommentModalButtons";
 
 interface CommentDetailsModalProps {
@@ -25,123 +17,41 @@ export function CommentDetailsModal({
   comment,
   onModerate,
 }: CommentDetailsModalProps) {
-  const { height } = useWindowDimensions();
-  const slideAnim = useRef(new Animated.Value(height)).current;
-
-  useEffect(() => {
-    if (isVisible) {
-      Animated.timing(slideAnim, {
-        toValue: 0,
-        duration: 300,
-        useNativeDriver: true,
-      }).start();
-    } else {
-      slideAnim.setValue(height);
-    }
-  }, [isVisible]);
-
   return (
-    <Modal
-      visible={isVisible}
-      transparent
-      animationType="none"
-      onRequestClose={onClose}
+    <BaseModal
+      isVisible={isVisible}
+      onClose={onClose}
+      title={t("comment_details") || "Comment Details"}
     >
-      <View style={styles.overlay}>
-        <Pressable
-          style={styles.overlayPressable}
-          onPress={onClose}
-          accessibilityLabel={t("close_modal") || "Close Modal"}
-          accessibilityRole="button"
+      {/* Comment Buttons */}
+      <View style={{ paddingHorizontal: 16, paddingBottom: 16 }}>
+        <CommentModalButtons
+          commentId={comment.id}
+          onModerate={(id, action) => {
+            onModerate(id, action);
+            onClose();
+          }}
         />
-        <Animated.View
-          style={[
-            styles.modalContainer,
-            { maxHeight: height * 0.5 },
-            { transform: [{ translateY: slideAnim }] },
-          ]}
-        >
-          <View style={styles.header}>
-            <Text style={styles.modalTitle}>
-              {t("comment_details") || "Comment Details"}
-            </Text>
-            <Pressable
-              onPress={onClose}
-              style={styles.closeButton}
-              accessibilityLabel={t("close_modal") || "Close Modal"}
-              accessibilityRole="button"
-            >
-              <Text style={styles.closeButtonText}>
-                {t("close") || "Close"}
-              </Text>
-            </Pressable>
-          </View>
-
-          {/* Comment Buttons */}
-          <CommentModalButtons
-            commentId={comment.id}
-            onModerate={(id, action) => {
-              onModerate(id, action);
-              onClose();
-            }}
-          />
-
-          <View style={styles.content}>
-            <Text style={styles.modalText}>
-              {t("author") || "Author"}: {comment.author}
-            </Text>
-            <Text style={styles.modalText}>
-              {t("thread") || "Thread"}: {comment.thread}
-            </Text>
-            <Text style={styles.modalText}>
-              {t("content") || "Content"}: {comment.text}
-            </Text>
-          </View>
-        </Animated.View>
       </View>
-    </Modal>
+      <View>
+        <Text style={styles.modalText}>
+          {t("author") || "Author"}: {comment.author}
+        </Text>
+        <Text style={styles.modalText}>
+          {t("thread") || "Thread"}: {comment.thread}
+        </Text>
+        <Text style={styles.modalText}>
+          {t("content") || "Content"}: {comment.text}
+        </Text>
+      </View>
+    </BaseModal>
   );
 }
 
 const styles = StyleSheet.create({
-  overlay: {
-    flex: 1,
-    backgroundColor: "rgba(0, 0, 0, 0.5)",
-    justifyContent: "flex-end",
-  },
-  overlayPressable: {
-    flex: 1,
-  },
-  modalContainer: {
-    borderTopLeftRadius: 16,
-    borderTopRightRadius: 16,
-    overflow: "hidden",
-    backgroundColor: colors.surfaceLight[500],
-  },
-  header: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    padding: 16,
-    borderBottomWidth: 1,
-    borderBottomColor: colors.baseDark[100],
-  },
-  modalTitle: {
-    fontSize: 18,
-    fontWeight: "bold",
-  },
-  closeButton: {
-    padding: 8,
-  },
-  closeButtonText: {
-    color: colors.primary.DEFAULT,
-    fontSize: 16,
-  },
-  content: {
-    padding: 16,
-  },
   modalText: {
     fontSize: 16,
     marginBottom: 8,
+    paddingHorizontal: 16,
   },
 });
