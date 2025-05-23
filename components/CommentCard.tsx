@@ -1,6 +1,7 @@
+import BaseSheet from "@/components/BaseSheet";
 import colors from "@/theme/colors";
 import * as Haptics from "expo-haptics";
-import React, { useState } from "react";
+import React from "react";
 import { StyleSheet, useWindowDimensions } from "react-native";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
 import Animated, {
@@ -11,9 +12,10 @@ import Animated, {
   withSpring,
   withTiming,
 } from "react-native-reanimated";
+import { useModalController } from "../hooks/useModalController";
 import { Comment } from "../types/comment";
 import { CommentCardContent } from "./CommentCardContent";
-import { CommentDetailsModal } from "./CommentDetailsModal";
+import CommentDetailsModalContent from "./CommentDetailsModalContent";
 import { SwipeActionBox } from "./SwipeActionBox";
 
 interface CommentCardProps {
@@ -23,10 +25,10 @@ interface CommentCardProps {
 
 export default function CommentCard({ comment, onModerate }: CommentCardProps) {
   const translateX = useSharedValue(0);
-  const [isModalVisible, setModalVisible] = useState(false);
   const dragOccurred = useSharedValue(false);
   const fadeProgress = useSharedValue(0);
   const { width } = useWindowDimensions();
+  const { modalRef, openModal, closeModal } = useModalController();
 
   const panGesture = Gesture.Pan()
     .minDistance(10)
@@ -62,7 +64,7 @@ export default function CommentCard({ comment, onModerate }: CommentCardProps) {
     })
     .onStart(() => {
       runOnJS(Haptics.selectionAsync)();
-      runOnJS(setModalVisible)(true);
+      runOnJS(openModal)();
     })
     .onFinalize(() => {
       fadeProgress.value = 0;
@@ -78,8 +80,6 @@ export default function CommentCard({ comment, onModerate }: CommentCardProps) {
     opacity: fadeProgress.value,
   }));
 
-  const handleCloseModal = () => setModalVisible(false);
-
   return (
     <>
       <Animated.View
@@ -94,23 +94,16 @@ export default function CommentCard({ comment, onModerate }: CommentCardProps) {
         <GestureDetector gesture={composedGesture}>
           <Animated.View style={[styles.commentContainer, animatedStyle]}>
             <CommentCardContent comment={comment} />
-            {/* <CommentCardButtons
-              commentId={comment.id}
-              onModerate={onModerate}
-            /> */}
+
             {/* Grey Fading Effect */}
             <Animated.View style={[styles.fadeOverlay, fadeStyle]} />
           </Animated.View>
         </GestureDetector>
       </Animated.View>
 
-      {/* Comment Details Modal */}
-      <CommentDetailsModal
-        isVisible={isModalVisible}
-        onClose={handleCloseModal}
-        comment={comment}
-        onModerate={onModerate}
-      />
+      <BaseSheet ref={modalRef}>
+        <CommentDetailsModalContent comment={comment} onModerate={onModerate} />
+      </BaseSheet>
     </>
   );
 }

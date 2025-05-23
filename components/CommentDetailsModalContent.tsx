@@ -1,35 +1,25 @@
 import { t } from "i18next";
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
-import { BaseModal } from "./BaseModal";
 import { CommentModalButtons } from "./CommentModalButtons";
 
 interface CommentDetailsModalProps {
-  isVisible: boolean;
-  onClose: () => void;
   comment: { id: string; text: string; author: string; thread: string };
   onModerate: (id: string, action: "keep" | "delete" | "hide") => void;
 }
 
-export function CommentDetailsModal({
-  isVisible,
-  onClose,
+export default function CommentDetailsModalContent({
   comment,
   onModerate,
 }: CommentDetailsModalProps) {
   return (
-    <BaseModal
-      isVisible={isVisible}
-      onClose={onClose}
-      title={t("comment_details") || "Comment Details"}
-    >
+    <View>
       {/* Comment Buttons */}
       <View style={{ paddingHorizontal: 16, paddingBottom: 16 }}>
         <CommentModalButtons
           commentId={comment.id}
           onModerate={(id, action) => {
             onModerate(id, action);
-            onClose();
           }}
         />
       </View>
@@ -44,7 +34,7 @@ export function CommentDetailsModal({
           {t("content") || "Content"}: {comment.text}
         </Text>
       </View>
-    </BaseModal>
+    </View>
   );
 }
 

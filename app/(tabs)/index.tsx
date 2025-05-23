@@ -1,16 +1,19 @@
+import BaseSheet from "@/components/BaseSheet";
+import FilterModalContent from "@/components/FilterModalContent";
 import { t } from "i18next";
 import React, { useEffect, useState } from "react";
 import { FlatList, RefreshControl, StyleSheet, Text, View } from "react-native";
 import CommentCard from "../../components/CommentCard";
-import FilterModal from "../../components/FilterModal";
 import Header from "../../components/Header";
+import { useModalController } from "../../hooks/useModalController"; // Adjust path accordingly
 import { useModerationStore } from "../../stores/moderationStore";
 import colors from "../../theme/colors";
 
 export default function Index() {
   const { comments, fetchComments, moderateComment } = useModerationStore();
   const [filter, setFilter] = useState<"hateful" | "nonHateful">("hateful");
-  const [isFilterModalVisible, setFilterModalVisible] = useState(false);
+
+  const { modalRef, openModal, closeModal } = useModalController();
 
   useEffect(() => {
     fetchComments();
@@ -43,9 +46,7 @@ export default function Index() {
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }
-        ListHeaderComponent={
-          <Header onFilterPress={() => setFilterModalVisible(true)} />
-        }
+        ListHeaderComponent={<Header onFilterPress={openModal} />}
         ListEmptyComponent={
           <View style={styles.emptyState}>
             <Text style={styles.emptyText}>
@@ -54,12 +55,18 @@ export default function Index() {
           </View>
         }
       />
-      <FilterModal
-        visible={isFilterModalVisible}
-        filter={filter}
-        onClose={() => setFilterModalVisible(false)}
-        onSelectFilter={setFilter}
-      />
+
+      <BaseSheet ref={modalRef}>
+        <FilterModalContent
+          filter={filter}
+          onClose={closeModal}
+          onSelectFilter={(selectedFilter) => {
+            setFilter(selectedFilter);
+            closeModal();
+            console.log("Selected filter:", selectedFilter);
+          }}
+        />
+      </BaseSheet>
     </View>
   );
 }

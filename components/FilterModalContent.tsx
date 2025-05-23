@@ -1,27 +1,20 @@
 import { t } from "i18next";
 import React from "react";
-import { StyleSheet, Text, TouchableOpacity } from "react-native";
-import { BaseModal } from "./BaseModal";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 interface FilterModalProps {
-  visible: boolean;
   filter: "hateful" | "nonHateful";
   onClose: () => void;
   onSelectFilter: (filter: "hateful" | "nonHateful") => void;
 }
 
 export default function FilterModal({
-  visible,
   filter,
   onClose,
   onSelectFilter,
 }: FilterModalProps) {
   return (
-    <BaseModal
-      isVisible={visible}
-      onClose={onClose}
-      title={t("filter_title") || "Filter Options"}
-    >
+    <View>
       <TouchableOpacity
         style={[
           styles.filterOption,
@@ -56,7 +49,7 @@ export default function FilterModal({
           {t("filter_non_hateful") || "Non-Hateful"}
         </Text>
       </TouchableOpacity>
-    </BaseModal>
+    </View>
   );
 }
 
