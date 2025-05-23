@@ -59,7 +59,7 @@ export function IconActionButton({
 const styles = StyleSheet.create({
   buttonWrapper: {
     borderRadius: 10,
-    overflow: "hidden", // CRITICAL for clipping ripple
+    overflow: "hidden",
     marginHorizontal: 6,
   },
   pressable: {

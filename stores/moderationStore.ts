@@ -13,7 +13,7 @@ interface ModerationState {
 
 export const useModerationStore = create<ModerationState>((set, get) => ({
   comments: [],
-  loading: false, // Track loading state
+  loading: false,
   fetchComments: async () => {
     try {
       const response = await fetch(
@@ -21,14 +21,12 @@ export const useModerationStore = create<ModerationState>((set, get) => ({
       );
       const data = await response.json();
 
-      // Transform the data to match the Comment interface
       const comments = data.map((item: any) => ({
         id: item.id.toString(),
         text: item.body,
         author: item.email,
         thread: `Post ${item.postId}`,
-        isHateful: Math.random() < 0.5, // Randomly assign true or false
-        // generate a random timestamp in iso format
+        isHateful: Math.random() < 0.5,
         time: new Date(
           Date.now() - Math.floor(Math.random() * 1000000000)
         ).toISOString(),
@@ -45,11 +43,10 @@ export const useModerationStore = create<ModerationState>((set, get) => ({
     // Optimistically update the UI
     set((state) => ({
       comments: state.comments.filter((comment) => comment.id !== id),
-      loading: true, // Set loading to true
+      loading: true,
     }));
 
     try {
-      // Simulate a server request
       const response = await fetch(
         `https://jsonplaceholder.typicode.com/comments/${id}`,
         {
@@ -68,7 +65,7 @@ export const useModerationStore = create<ModerationState>((set, get) => ({
       // Rollback the optimistic update
       set({ comments: previousComments });
     } finally {
-      set({ loading: false }); // Reset loading state
+      set({ loading: false });
     }
   },
 }));

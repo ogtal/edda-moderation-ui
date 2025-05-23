@@ -5,7 +5,7 @@ import React, { useEffect, useState } from "react";
 import { FlatList, RefreshControl, StyleSheet, Text, View } from "react-native";
 import CommentCard from "../../components/CommentCard";
 import Header from "../../components/Header";
-import { useModalController } from "../../hooks/useModalController"; // Adjust path accordingly
+import { useModalController } from "../../hooks/useModalController";
 import { useModerationStore } from "../../stores/moderationStore";
 import colors from "../../theme/colors";
 

@@ -10,7 +10,6 @@ export default function Search() {
   const { comments, moderateComment } = useModerationStore();
   const [query, setQuery] = useState("");
 
-  // Filter comments based on the search query
   const filteredComments = comments.filter(
     (comment) =>
       comment.text.toLowerCase().includes(query.toLowerCase()) ||

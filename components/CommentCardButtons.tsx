@@ -44,9 +44,9 @@ export function CommentCardButtons({
 const styles = StyleSheet.create({
   container: {
     flexDirection: "row",
-    justifyContent: "space-between", // Ensures even spacing between buttons
+    justifyContent: "space-between",
     alignItems: "center",
     marginTop: 8,
-    paddingHorizontal: 16, // Adds padding to prevent buttons from touching edges
+    paddingHorizontal: 16,
   },
 });

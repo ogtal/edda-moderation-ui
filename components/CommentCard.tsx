@@ -124,7 +124,7 @@ const styles = StyleSheet.create({
   },
   fadeOverlay: {
     ...StyleSheet.absoluteFillObject,
-    backgroundColor: `${colors.baseDark[500]}40`, // '80' = ~50% opacity in hex
+    backgroundColor: `${colors.baseDark[500]}40`,
     zIndex: 2,
   },
 });

@@ -1,4 +1,3 @@
-// CustomBottomSheet.tsx
 import colors from "@/theme/colors";
 import {
   BottomSheetBackdrop,
