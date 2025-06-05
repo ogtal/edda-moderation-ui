@@ -111,11 +111,11 @@ export default function CommentCard({ comment, onModerate }: CommentCardProps) {
 const styles = StyleSheet.create({
   container: {
     position: "relative",
-    backgroundColor: colors.surfaceLight[500],
+    backgroundColor: colors.surfaceLight.DEFAULT,
     overflow: "hidden",
   },
   commentContainer: {
-    backgroundColor: colors.surfaceLight[500],
+    backgroundColor: colors.surfaceLight.DEFAULT,
     zIndex: 1,
     borderBottomColor: colors.baseDark[100],
     paddingVertical: 16,

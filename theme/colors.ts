@@ -27,7 +27,7 @@ const colors = {
     900: "#d1d1d1",
   },
   surfaceLight: {
-    DEFAULT: "#e5e3d2",
+    DEFAULT: "#F4EFF5",
     100: "#383520",
     200: "#6f6b40",
     300: "#a59e62",

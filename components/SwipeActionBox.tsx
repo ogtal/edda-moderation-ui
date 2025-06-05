@@ -74,7 +74,7 @@ export function SwipeActionBox({ type, translateX }: SwipeActionBoxProps) {
           <Ionicons
             name={type === "delete" ? "trash" : "checkmark"}
             size={24}
-            color={colors.surfaceLight[500]}
+            color={colors.surfaceLight.DEFAULT}
             accessibilityLabel={
               type === "delete" ? t("delete_action") : t("keep_action")
             }
