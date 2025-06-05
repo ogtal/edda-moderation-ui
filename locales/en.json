@@ -25,5 +25,8 @@
   "loading": "Loading",
   "comment_details": "Comment details",
   "hateful_badge": "Hateful",
-  "yesterday": "Yesterday"
+  "yesterday": "Yesterday",
+  "include_non_hateful": "Include non-hateful",
+  "filter_description_both": "Showing hateful and non-hateful content",
+  "filter_description_hateful_only": "Showing only hateful content"
 }

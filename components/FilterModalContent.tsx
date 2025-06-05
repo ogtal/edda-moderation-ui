@@ -1,71 +1,77 @@
 import { t } from "i18next";
-import React from "react";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import React, { useEffect, useState } from "react";
+import { StyleSheet, Switch, Text, View } from "react-native";
 
 interface FilterModalProps {
-  filter: "hateful" | "nonHateful";
+  includeNonHateful: boolean;
   onClose: () => void;
-  onSelectFilter: (filter: "hateful" | "nonHateful") => void;
+  onToggleIncludeNonHateful: (value: boolean) => void;
 }
 
 export default function FilterModal({
-  filter,
+  includeNonHateful,
   onClose,
-  onSelectFilter,
+  onToggleIncludeNonHateful,
 }: FilterModalProps) {
+  const [localIncludeNonHateful, setLocalIncludeNonHateful] =
+    useState(includeNonHateful);
+
+  useEffect(() => {
+    setLocalIncludeNonHateful(includeNonHateful);
+  }, [includeNonHateful]);
+
+  const handleToggle = (value: boolean) => {
+    setLocalIncludeNonHateful(value);
+    onToggleIncludeNonHateful(value);
+    onClose();
+  };
+
   return (
-    <View>
-      <TouchableOpacity
-        style={[
-          styles.filterOption,
-          filter === "hateful" && styles.activeFilterOption,
-        ]}
-        onPress={() => {
-          onSelectFilter("hateful");
-          onClose();
-        }}
-        testID="filter-hateful-option"
-        accessibilityLabel={t("filter_hateful") || "Hateful"}
-        accessibilityRole="button"
-      >
-        <Text style={styles.filterOptionText}>
-          {t("filter_hateful") || "Hateful"}
+    <View style={styles.container}>
+      <View style={styles.row}>
+        <Text style={styles.label}>
+          {t("include_non_hateful") || "Include non-hateful content"}
         </Text>
-      </TouchableOpacity>
-      <TouchableOpacity
-        style={[
-          styles.filterOption,
-          filter === "nonHateful" && styles.activeFilterOption,
-        ]}
-        onPress={() => {
-          onSelectFilter("nonHateful");
-          onClose();
-        }}
-        testID="filter-non-hateful-option"
-        accessibilityLabel={t("filter_non_hateful") || "Non-Hateful"}
-        accessibilityRole="button"
-      >
-        <Text style={styles.filterOptionText}>
-          {t("filter_non_hateful") || "Non-Hateful"}
-        </Text>
-      </TouchableOpacity>
+        <Switch
+          value={localIncludeNonHateful}
+          onValueChange={handleToggle}
+          testID="include-non-hateful-switch"
+          accessibilityLabel={
+            t("include_non_hateful") || "Include non-hateful content"
+          }
+        />
+      </View>
+
+      <Text style={styles.caption}>
+        {localIncludeNonHateful
+          ? t("filter_description_both") ||
+            "Showing hateful and non-hateful content"
+          : t("filter_description_hateful_only") ||
+            "Showing only hateful content"}
+      </Text>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  filterOption: {
-    padding: 12,
-    marginBottom: 8,
-    backgroundColor: "#f0f0f0",
-    borderRadius: 8,
+  container: {
+    padding: 20,
+  },
+  row: {
+    flexDirection: "row",
+    justifyContent: "space-between",
     alignItems: "center",
+    paddingVertical: 12,
   },
-  activeFilterOption: {
-    backgroundColor: "#007BFF",
-  },
-  filterOptionText: {
+  label: {
     fontSize: 16,
     color: "#333",
+    flex: 1,
+    paddingRight: 10,
+  },
+  caption: {
+    fontSize: 14,
+    color: "#666",
+    marginTop: 10,
   },
 });

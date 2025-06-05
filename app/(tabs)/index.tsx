@@ -11,7 +11,7 @@ import colors from "../../theme/colors";
 
 export default function Index() {
   const { comments, fetchComments, moderateComment } = useModerationStore();
-  const [filter, setFilter] = useState<"hateful" | "nonHateful">("hateful");
+  const [filter, setFilter] = useState<"hateful" | "both">("hateful");
 
   const { modalRef, openModal, closeModal } = useModalController();
 
@@ -28,7 +28,7 @@ export default function Index() {
   };
 
   const filteredComments = comments.filter((comment) =>
-    filter === "hateful" ? comment.isHateful : !comment.isHateful
+    filter === "hateful" ? comment.isHateful : true
   );
 
   const handleModeration = (id: string, action: "keep" | "delete" | "hide") => {
@@ -58,12 +58,12 @@ export default function Index() {
 
       <BaseSheet ref={modalRef}>
         <FilterModalContent
-          filter={filter}
+          includeNonHateful={filter === "both"}
           onClose={closeModal}
-          onSelectFilter={(selectedFilter) => {
-            setFilter(selectedFilter);
+          onToggleIncludeNonHateful={(include) => {
+            setFilter(include ? "both" : "hateful");
             closeModal();
-            console.log("Selected filter:", selectedFilter);
+            console.log("Selected filter:", include ? "both" : "hateful");
           }}
         />
       </BaseSheet>
